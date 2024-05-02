@@ -35,5 +35,7 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
-# Google Cloud Service Key
+# Google Cloud Service Keys
 ocriginaltranslator-422012-1479f9d4b491.json
+ocriginaltranslator-422012-d3946f3882f7.json
+ocriginaltranslator-422012-b7fa6cb983e3.json

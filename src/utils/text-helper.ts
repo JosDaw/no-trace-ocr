@@ -26,3 +26,10 @@ export function getFirebaseError(errorMessage: string): string {
     errorMessages[errorCode] || 'An unknown error occurred. Please try again.'
   );
 }
+
+export function convertNewLinesToHTML(text: string): string {
+  return text
+    .split('\n')
+    .map((line) => `<p>${line}</p>`)
+    .join('');
+}

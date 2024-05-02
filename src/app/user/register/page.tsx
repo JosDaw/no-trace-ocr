@@ -1,9 +1,21 @@
-'use client'
+'use client';
 import { firebaseApp } from '@/config/firebase';
 import { getFirebaseError } from '@/utils/text-helper';
-import { Button, Checkbox, Container, Flex, Group, Text, TextInput } from '@mantine/core';
+import {
+  Button,
+  Checkbox,
+  Container,
+  Flex,
+  Group,
+  Text,
+  TextInput,
+} from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import { createUserWithEmailAndPassword, getAuth, sendEmailVerification } from 'firebase/auth';
+import {
+  createUserWithEmailAndPassword,
+  getAuth,
+  sendEmailVerification,
+} from 'firebase/auth';
 import Link from 'next/link';
 import { useState } from 'react';
 
@@ -39,7 +51,11 @@ const RegisterPage = () => {
 
     setLoading(true);
     try {
-      const userCredential = await createUserWithEmailAndPassword(auth, email, password);
+      const userCredential = await createUserWithEmailAndPassword(
+        auth,
+        email,
+        password
+      );
       await sendEmailVerification(userCredential.user);
       showNotification({
         title: 'Success',
@@ -60,54 +76,65 @@ const RegisterPage = () => {
     setLoading(false);
   };
 
-
   return (
-    <Container mx="auto" mt="xl">
-      <Text size="xl" ta="center" fw={900} style={{ marginBottom: 20 }}>Register</Text>
+    <Container mx='auto' mt='xl'>
+      <Text size='xl' ta='center' fw={900} style={{ marginBottom: 20 }}>
+        Register
+      </Text>
       <Flex
-        gap="md"
-        justify="flex-start"
-        align="flex-start"
-        direction="column"
-        wrap="wrap"
+        gap='md'
+        justify='flex-start'
+        align='flex-start'
+        direction='column'
+        wrap='wrap'
       >
         <TextInput
-          label="Email"
-          placeholder="Enter your email"
+          label='Email'
+          placeholder='Enter your email'
           value={email}
           onChange={(event) => setEmail(event.currentTarget.value)}
           required
           miw={350}
         />
         <TextInput
-          label="Password"
-          type="password"
-          placeholder="Enter your password"
+          label='Password'
+          type='password'
+          placeholder='Enter your password'
           value={password}
           onChange={(event) => setPassword(event.currentTarget.value)}
           required
         />
         <TextInput
-          label="Confirm Password"
-          type="password"
-          placeholder="Confirm your password"
+          label='Confirm Password'
+          type='password'
+          placeholder='Confirm your password'
           value={confirmPassword}
           onChange={(event) => setConfirmPassword(event.currentTarget.value)}
           required
         />
         <Checkbox
-          label={<>
-            I agree to the OCRiginal Translator{" "}
-            <Link href="/legal/terms" target="_blank">
-              terms and conditions
-            </Link>
-          </>}
+          label={
+            <>
+              I agree to the OCRiginal Translator{' '}
+              <Link href='/legal/terms' target='_blank'>
+                terms and conditions
+              </Link>
+            </>
+          }
           checked={termsAccepted}
-          onChange={(event: { currentTarget: { checked: boolean | ((prevState: boolean) => boolean); }; }) => setTermsAccepted(event.currentTarget.checked)}
-          mt="md"
+          onChange={(event: {
+            currentTarget: {
+              checked: boolean | ((prevState: boolean) => boolean);
+            };
+          }) => setTermsAccepted(event.currentTarget.checked)}
+          mt='md'
         />
-        <Group mt="md">
-          <Button disabled={!termsAccepted} onClick={handleRegister} loading={loading}>
+        <Group mt='md'>
+          <Button
+            disabled={!termsAccepted}
+            onClick={handleRegister}
+            loading={loading}
+          >
             Register
           </Button>
         </Group>

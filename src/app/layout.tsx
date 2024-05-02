@@ -1,8 +1,14 @@
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
+import '@mantine/tiptap/styles.css';
 
 import { AppLayout } from '@/components/layout/AppLayout';
-import { ColorSchemeScript, createTheme, MantineColorsTuple, MantineProvider } from '@mantine/core';
+import {
+  ColorSchemeScript,
+  createTheme,
+  MantineColorsTuple,
+  MantineProvider,
+} from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
 
 export const metadata = {
@@ -20,7 +26,7 @@ const myColor: MantineColorsTuple = [
   '#5474b4',
   '#44639f',
   '#39588f',
-  '#2d4b81'
+  '#2d4b81',
 ];
 
 const theme = createTheme({
@@ -31,14 +37,13 @@ const theme = createTheme({
   defaultRadius: 'md',
 });
 
-
 export default function RootLayout({
   children,
 }: {
   children: React.ReactNode;
 }) {
   return (
-    <html lang="en">
+    <html lang='en'>
       <head>
         <ColorSchemeScript />
       </head>
@@ -46,7 +51,6 @@ export default function RootLayout({
         <MantineProvider theme={theme}>
           <Notifications />
           <AppLayout>{children}</AppLayout>
-
         </MantineProvider>
       </body>
     </html>

@@ -5,9 +5,7 @@ import { NextRequest, NextResponse } from 'next/server';
 export async function POST(req: NextRequest): Promise<NextResponse> {
   try {
     const formData = await req.formData();
-    console.log('🚀 ~ POST ~ formData:', formData);
     const fileBlob = formData.get('file');
-    console.log('🚀 ~ POST ~ fileBlob:', fileBlob);
 
     if (!fileBlob || !(fileBlob instanceof Blob)) {
       return new NextResponse(JSON.stringify({ error: 'No file uploaded' }), {
@@ -16,7 +14,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
 
     // Set credentials from environment variable
-    const credentials = JSON.parse(process.env.GOOGLE_APPLICATION_CREDENTIALS || '');
+    const credentials = JSON.parse(
+      process.env.GOOGLE_APPLICATION_CREDENTIALS || ''
+    );
     const auth = new GoogleAuth({ credentials });
 
     // Convert the Blob to a Uint8Array
@@ -24,7 +24,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const data = new Uint8Array(arrayBuffer);
 
     // Create a new client for the Vision API
-    const client = new ImageAnnotatorClient({auth});
+    const client = new ImageAnnotatorClient({ auth });
 
     // Convert the Uint8Array to base64
     const base64Image = Buffer.from(data).toString('base64');
@@ -33,7 +33,6 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const [result] = await client.textDetection({
       image: { content: base64Image },
     });
-
 
     // Return the result as a JSON response
     return new NextResponse(JSON.stringify({ result }), {

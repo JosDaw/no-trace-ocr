@@ -1,71 +1,155 @@
-'use client'
+'use client';
+import DisplayResults from '@/components/display/DisplayResults';
+import LoadingCover from '@/components/layout/LoadingCover';
 import CostSummary from '@/components/upload/CostSummary';
 import FileUpload from '@/components/upload/FileUpload';
 import ProcessText from '@/components/upload/ProcessText';
 import useUser from '@/store/useUser';
-import { Flex } from '@mantine/core';
+import { checkPDFResults } from '@/utils/upload-helper';
+import { Flex, Paper } from '@mantine/core';
+import { showNotification } from '@mantine/notifications';
 import { useState } from 'react';
 
 export default function UploadPage() {
   const [totalPages, setTotalPages] = useState<number>(0);
-  const [localFiles, setLocalFiles] = useState<File[]>([]);
+  const [localFile, setLocalFile] = useState<File | null>(null);
+  const [isProcessing, setIsProcessing] = useState<boolean>(false);
+  const [fileType, setFileType] = useState<string>('');
+  const [showResults, setShowResults] = useState<boolean>(false);
+  const [textJSON, setTextJSON] = useState<any>({ annotations: [] });
 
   const { isLoggedIn, user } = useUser();
 
-  const costPerItem = Number(process.env.PRICE_PER_ITEM) || 0.02;
+  const costPerItem = Number(process.env.PRICE_PER_ITEM) || 0.05;
   const hasValidCredit = user.credit >= totalPages * costPerItem;
 
-  const handleProcessFiles = async () => {
-    console.log('Processing files...', localFiles);
+  const handleProcessFile = async () => {
+    const processStart = () => {
+      setIsProcessing(true);
+    };
 
-    // Check if localFiles is defined and contains files
-    if (!localFiles || localFiles.length === 0) {
-      console.error('No files to process.');
-      return 0;
+    const processComplete = () => {
+      setIsProcessing(false);
+      setShowResults(true);
+    };
+
+    const handleError = (message: string) => {
+      showNotification({
+        title: 'Error processing file',
+        message,
+        color: 'red',
+      });
+      processComplete();
+    };
+
+    processStart();
+
+    if (!localFile) {
+      handleError('No file provided. Please upload a file.');
+      return;
     }
 
     try {
-      const labels = [];
+      const fileType = localFile.type === 'application/pdf' ? 'pdf' : 'image';
+      setFileType(fileType);
 
-      // Iterate over each file in localFiles array
-      for (const file of localFiles) {
+      let result;
+      if (fileType === 'pdf') {
+        result = await sendFileToServer(
+          'api/vision-pdf-process',
+          JSON.stringify({ fileName: localFile.name + user.userID })
+        );
+      } else {
         const formData = new FormData();
-        formData.append('file', file);
-
-        const response = await fetch('api/vision', {
-          method: 'POST',
-          body: formData
-        });
-
-        if (!response.ok) {
-          throw new Error('Network response was not ok.');
-        }
-
-        const result = await response.json();
-        labels.push(result);
+        formData.append('file', localFile);
+        result = await sendFileToServer('api/vision-image', formData);
+        setTextJSON({ annotations: result.result.textAnnotations });
       }
 
-      console.log("🚀 ~ totalFiles ~ labels:", labels);
-      return labels;
-    } catch (error) {
-      console.error('Error processing file:', error);
-      return 0;
+      showNotification({
+        title: 'Processing Complete',
+        message: 'Please check the display.',
+        color: 'green',
+      });
+    } catch (error: any) {
+      handleError(error.message);
+    } finally {
+      checkPDFResults(localFile.name + user.userID, setIsProcessing).then(
+        async (pdfResult: any) => {
+          if (pdfResult) {
+            setTextJSON({
+              annotations: pdfResult.result.responses[0].fullTextAnnotation,
+            });
+
+            handleDeleteFiles().then(() => {
+              processComplete();
+            });
+          }
+        }
+      );
     }
-  }
+  };
+
+  const sendFileToServer = async (url: string, body: string | FormData) => {
+    const response = await fetch(url, {
+      method: 'POST',
+      body,
+    });
+    if (!response.ok) {
+      throw new Error(
+        'Server responded with an error. Please try again later.'
+      );
+    }
+    return response.json();
+  };
+
+  const handleDeleteFiles = async () => {
+    if (!localFile) return;
+
+    await sendFileToServer(
+      'api/vision-pdf-delete',
+      JSON.stringify({ fileName: localFile.name + user.userID })
+    );
+
+    showNotification({
+      title: 'Files Deleted',
+      message: 'Your content has been deleted and is secure.',
+      color: 'green',
+    });
+  };
 
   return (
-    <>
-      <FileUpload setTotalPages={setTotalPages} setLocalFiles={setLocalFiles} />
-      <Flex
-        gap="md"
-        justify="center"
-        align="center"
-        direction="row"
-        wrap="wrap"
-      >
-        <CostSummary totalCount={totalPages} user={user} />
-        <ProcessText isLoggedIn={isLoggedIn} hasValidCredit={hasValidCredit} handleProcessFiles={handleProcessFiles} />
-      </Flex>
-    </>
+    <Paper>
+      <LoadingCover visible={isProcessing} />
+      {showResults ? (
+        <DisplayResults fileType={fileType} textJSON={textJSON} />
+      ) : (
+        <>
+          <FileUpload
+            handleDeleteFiles={handleDeleteFiles}
+            setTotalPages={setTotalPages}
+            setLocalFile={setLocalFile}
+            user={user}
+            totalPages={totalPages}
+          />
+          <Flex
+            gap='md'
+            justify='center'
+            align='center'
+            direction='row'
+            wrap='wrap'
+          >
+            <CostSummary totalCount={totalPages} user={user} />
+            <ProcessText
+              isLoggedIn={isLoggedIn}
+              hasValidCredit={hasValidCredit}
+              handleProcessFile={handleProcessFile}
+              isProcessing={isProcessing}
+              totalPages={totalPages}
+            />
+          </Flex>
+        </>
+      )}
+    </Paper>
   );
 }
