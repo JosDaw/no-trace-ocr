@@ -16,9 +16,19 @@ const questions = [
       'To create an account, click on the "Register" button and follow the instructions.',
   },
   {
-    question: 'How does OCRiginal Translator work?',
+    question: 'How does No Trace OCR work?',
     answer:
-      'After creating an account, you can upload your documents for OCR processing. You can use your free credit or load more credit onto your account to process more documents. Once your documents are processed, you can download the results in your preferred format.',
+      'After creating an account, you can upload your documents for OCR processing. You can use your free credit or load more credit onto your account to process more documents. Once your documents are processed, you can download the results in your preferred format. After processing, all documents are immediately deleted from our servers.',
+  },
+  {
+    question: 'Is No Trace OCR really confidential?',
+    answer:
+      'No documents are stored on our servers after processing and no documents are ever shared or sold to third parties.',
+  },
+  {
+    question: 'Why is No Trace OCR cheaper than competitors?',
+    answer:
+      'We believe in providing affordable OCR services to professionals at all levels. Our pricing reflects a quick, simple, and no-storage OCR process that is accessible to everyone.',
   },
   {
     question: 'How can I reset my password?',
@@ -47,12 +57,12 @@ export function Faq() {
       shadow='xl'
       radius='none'
       style={{
-        backgroundColor: '#89D4CF',
+        background: 'linear-gradient(to bottom, white, #89D4CF)',
         padding: '120px 0',
       }}
     >
       <Container size='sm'>
-        <Title ta='center' my={30}>
+        <Title ta='center' my={45}>
           Frequently Asked Questions
         </Title>
 

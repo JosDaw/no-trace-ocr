@@ -13,8 +13,8 @@ export default function Hero() {
     >
       <Container size='lg'>
         <div style={{ maxWidth: 600 }}>
-          <Title className='text-white' order={1} style={{}}>
-            Elevate Your Translations with Cutting-Edge OCR Technology
+          <Title order={1} c='white'>
+            Secure Your Documents with Leading-Edge OCR Technology
           </Title>
           <Text
             color='dimmed'
@@ -25,13 +25,14 @@ export default function Hero() {
               color: '#FFFFFF',
             }}
           >
-            Unlock the full potential of your translation processes with our
-            secure, accurate, and fast OCR services, designed specifically for
-            professional translators.
+            Empower your business with our highly secure and accurate OCR
+            services, designed for any professional needing reliable document
+            conversion. Experience rapid processing speeds with the assurance
+            that your data is protected and immediately deleted after use.
           </Text>
           <Link href='/user/register' passHref>
             <Button size='lg' variant='white' style={{ marginTop: 20 }}>
-              Try It Free
+              Experience Secure OCR Now
             </Button>
           </Link>
         </div>

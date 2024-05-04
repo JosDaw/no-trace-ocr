@@ -1,9 +1,11 @@
 'use client';
 import useUser from '@/store/useUser';
-import { AppShell, Burger, Button, Group } from '@mantine/core';
+import { formatCurrency } from '@/utils/text-helper';
+import { AppShell, Burger, Button, Group, Text, Title } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import Link from 'next/link';
 import { Footer } from './Footer';
+import Logo from './Logo';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const [opened, { toggle }] = useDisclosure();
@@ -24,9 +26,15 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         <Group h='100%' px='md'>
           <Burger opened={opened} onClick={toggle} hiddenFrom='sm' size='sm' />
           <Group justify='space-between' style={{ flex: 1 }}>
-            Logo
+            <Logo />
             {isLoggedIn ? (
-              <Group ml='xl' gap={2} visibleFrom='sm'>
+              <Group ml='xl' gap={8} visibleFrom='sm'>
+                <Text size='sm' c='gray' mx={5}>
+                  Credit: {formatCurrency(user.credit)}
+                </Text>
+                <Link href='/free' passHref>
+                  <Button color='green'>Free Upload</Button>
+                </Link>
                 <Link href='/upload' passHref>
                   <Button>Upload</Button>
                 </Link>
@@ -35,7 +43,10 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 </Button>
               </Group>
             ) : (
-              <Group ml='xl' gap={2} visibleFrom='sm'>
+              <Group ml='xl' gap={8} visibleFrom='sm'>
+                <Link href='/free' passHref>
+                  <Button color='green'>Free Upload</Button>
+                </Link>
                 <Link href='/user/register' passHref>
                   <Button>Register</Button>
                 </Link>
@@ -50,7 +61,13 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
       <AppShell.Navbar py='md' px={4}>
         {isLoggedIn ? (
-          <Group ml='xl' gap={2} visibleFrom='sm'>
+          <Group ml='xl' gap={6} visibleFrom='sm'>
+            <Text size='sm' c='gray' mx={5}>
+              Credit: {formatCurrency(user.credit)}
+            </Text>
+            <Link href='/free' passHref>
+              <Button color='green'>Free Upload</Button>
+            </Link>
             <Link href='/upload' passHref>
               <Button>Upload</Button>
             </Link>
@@ -59,10 +76,17 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             </Button>
           </Group>
         ) : (
-          <>
-            <Button>Register</Button>
-            <Button>Login</Button>
-          </>
+          <Group ml='xl' gap={8} visibleFrom='sm'>
+            <Link href='/free' passHref>
+              <Button color='green'>Free Upload</Button>
+            </Link>
+            <Link href='/user/register' passHref>
+              <Button>Register</Button>
+            </Link>
+            <Link href='/user/login' passHref>
+              <Button>Login</Button>
+            </Link>
+          </Group>
         )}
       </AppShell.Navbar>
 

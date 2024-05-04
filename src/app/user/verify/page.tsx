@@ -3,14 +3,29 @@ import LoadingCover from '@/components/layout/LoadingCover';
 import { database, firebaseApp } from '@/config/firebase';
 import useUser from '@/store/useUser';
 import { getFirebaseError } from '@/utils/text-helper';
-import { Box, Button, Container, Flex, Text, Title } from '@mantine/core';
+import {
+  Alert,
+  Box,
+  Button,
+  Container,
+  Flex,
+  Text,
+  Title,
+} from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import { IconMoodHappyFilled, IconMoodSadFilled } from '@tabler/icons-react';
+import {
+  IconCircleCheck,
+  IconMoodHappyFilled,
+  IconMoodSadFilled,
+  IconTriangle,
+} from '@tabler/icons-react';
 import { applyActionCode, getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Timestamp, addDoc, collection } from 'firebase/firestore';
 import Link from 'next/link';
 import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
+
+// TODO: check this page. seems like its failing on the first time.
 
 type VerificationStatus = 'error' | 'verified' | null;
 
@@ -33,11 +48,12 @@ const VerifyPage = () => {
         if (!user) {
           return;
         }
+        const costPerItem = Number(process.env.PRICE_PER_ITEM) || 0.05;
 
         await addDoc(collection(database, 'user'), {
           email: user.email,
           userID: user.uid,
-          credit: 1,
+          credit: costPerItem * 10,
           timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           dateCreated: Timestamp.now(),
           dateUpdated: Timestamp.now(),
@@ -48,6 +64,7 @@ const VerifyPage = () => {
               email: user.email,
               userID: user.uid,
               userDoc: userDoc.id,
+              credit: costPerItem * 10,
             });
 
             setVerificationStatus('verified');
@@ -116,6 +133,23 @@ const VerifyPage = () => {
               <Title my={20} ta='center' c='green'>
                 Your email has been successfully verified!
               </Title>
+
+              <Alert
+                my={50}
+                variant='light'
+                color='green'
+                title='Start uploading'
+                icon={<IconCircleCheck />}
+              >
+                <Text>
+                  Start using your account by uploading your documents.
+                </Text>
+                <Link href='/upload' passHref>
+                  <Button size='lg' mt={20} variant='white' color='green'>
+                    Upload
+                  </Button>
+                </Link>
+              </Alert>
             </>
           )}
           {verificationStatus === 'error' && (
@@ -124,6 +158,10 @@ const VerifyPage = () => {
               <Title my={20} ta='center' c='red'>
                 Oh no, the verification failed!
               </Title>
+              <Text>
+                Refresh the page and try again. If the problem persists, please
+                contact us.
+              </Text>
             </>
           )}
           <Flex gap={6}>

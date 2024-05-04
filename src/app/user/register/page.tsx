@@ -1,16 +1,23 @@
 'use client';
+import Password from '@/components/user/Password';
 import { firebaseApp } from '@/config/firebase';
-import { getFirebaseError } from '@/utils/text-helper';
+import { getFirebaseError, getStrength } from '@/utils/text-helper';
 import {
+  Box,
   Button,
+  Center,
   Checkbox,
   Container,
   Flex,
   Group,
+  PasswordInput,
+  Progress,
   Text,
   TextInput,
+  Title,
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
+import { IconCheck, IconX } from '@tabler/icons-react';
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -19,14 +26,13 @@ import {
 import Link from 'next/link';
 import { useState } from 'react';
 
-// TODO: require more secure password
-
 const RegisterPage = () => {
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
   const [termsAccepted, setTermsAccepted] = useState<boolean>(false);
   const [loading, setLoading] = useState<boolean>(false);
+  const [emailSent, setEmailSent] = useState<boolean>(false);
 
   const auth = getAuth(firebaseApp);
 
@@ -66,6 +72,7 @@ const RegisterPage = () => {
       setPassword('');
       setConfirmPassword('');
       setTermsAccepted(false);
+      setEmailSent(true);
     } catch (error: any) {
       showNotification({
         title: 'Registration Error',
@@ -78,67 +85,71 @@ const RegisterPage = () => {
 
   return (
     <Container mx='auto' mt='xl'>
-      <Text size='xl' ta='center' fw={900} style={{ marginBottom: 20 }}>
+      <Title ta='center' mb={45}>
         Register
+      </Title>
+      <Text fw={500} ta='center' mb={45}>
+        Create an account to get started with No Trace OCR, and receive 10 free
+        pages!
       </Text>
-      <Flex
-        gap='md'
-        justify='flex-start'
-        align='flex-start'
-        direction='column'
-        wrap='wrap'
-      >
-        <TextInput
-          label='Email'
-          placeholder='Enter your email'
-          value={email}
-          onChange={(event) => setEmail(event.currentTarget.value)}
-          required
-          miw={350}
-        />
-        <TextInput
-          label='Password'
-          type='password'
-          placeholder='Enter your password'
-          value={password}
-          onChange={(event) => setPassword(event.currentTarget.value)}
-          required
-        />
-        <TextInput
-          label='Confirm Password'
-          type='password'
-          placeholder='Confirm your password'
-          value={confirmPassword}
-          onChange={(event) => setConfirmPassword(event.currentTarget.value)}
-          required
-        />
-        <Checkbox
-          label={
-            <>
-              I agree to the OCRiginal Translator{' '}
-              <Link href='/legal/terms' target='_blank'>
-                terms and conditions
-              </Link>
-            </>
-          }
-          checked={termsAccepted}
-          onChange={(event: {
-            currentTarget: {
-              checked: boolean | ((prevState: boolean) => boolean);
-            };
-          }) => setTermsAccepted(event.currentTarget.checked)}
-          mt='md'
-        />
-        <Group mt='md'>
-          <Button
-            disabled={!termsAccepted}
-            onClick={handleRegister}
-            loading={loading}
-          >
-            Register
-          </Button>
-        </Group>
-      </Flex>
+      {emailSent ? (
+        <Title c='blue' ta='center' mb={45}>
+          Verification email sent to your email ({email}).
+        </Title>
+      ) : (
+        <Flex
+          gap='md'
+          justify='flex-start'
+          align='flex-start'
+          direction='column'
+          wrap='wrap'
+        >
+          <TextInput
+            label='Email'
+            placeholder='Enter your email'
+            value={email}
+            onChange={(event) => setEmail(event.currentTarget.value)}
+            required
+            miw={350}
+          />
+          <Password password={password} setPassword={setPassword} />
+          <PasswordInput
+            label='Confirm Password'
+            type='password'
+            placeholder='Confirm your password'
+            value={confirmPassword}
+            onChange={(event) => setConfirmPassword(event.currentTarget.value)}
+            required
+            miw={300}
+          />
+          <Checkbox
+            label={
+              <>
+                I agree to the No Trace OCR{' '}
+                <Link href='/legal/terms' target='_blank'>
+                  terms and conditions
+                </Link>
+              </>
+            }
+            checked={termsAccepted}
+            onChange={(event: {
+              currentTarget: {
+                checked: boolean | ((prevState: boolean) => boolean);
+              };
+            }) => setTermsAccepted(event.currentTarget.checked)}
+            mt='md'
+          />
+          <Group mt='md'>
+            <Button
+              disabled={!termsAccepted}
+              onClick={handleRegister}
+              loading={loading}
+            >
+              Register
+            </Button>
+          </Group>
+        </Flex>
+      )}
     </Container>
   );
 };

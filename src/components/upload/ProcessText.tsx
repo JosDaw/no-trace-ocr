@@ -1,13 +1,16 @@
+import { LoggedInUser } from '@/types/types';
 import {
   Button,
   Container,
+  Flex,
   Paper,
   Text,
   Title,
   useMantineTheme,
 } from '@mantine/core';
-import { IconCircleNumber3 } from '@tabler/icons-react';
+import { IconCircleNumber2, IconCircleNumber3 } from '@tabler/icons-react';
 import React from 'react';
+import CostSummary from './CostSummary';
 
 interface ProcessTextProps {
   handleProcessFile: () => void;
@@ -15,6 +18,7 @@ interface ProcessTextProps {
   hasValidCredit: boolean;
   isProcessing: boolean;
   totalPages: number;
+  user: LoggedInUser;
 }
 
 export default function ProcessText({
@@ -23,41 +27,51 @@ export default function ProcessText({
   hasValidCredit,
   isProcessing,
   totalPages,
+  user,
 }: ProcessTextProps) {
   const theme = useMantineTheme();
 
   return (
-    <Container my={100}>
+    <Paper my={100}>
       <Title ta='center' my={20}>
-        <IconCircleNumber3 size={50} color={theme.colors.green[6]} /> Process
-        Text
+        <IconCircleNumber2 size={50} color={theme.colors.green[6]} />
+        Confirm & Process Document
       </Title>
-      <Paper
-        style={{
-          maxWidth: 400,
-          margin: 'auto',
-          marginTop: 30,
-          padding: 20,
-          boxShadow: theme.shadows.sm,
-        }}
+      <Flex
+        gap='md'
+        justify='center'
+        align='center'
+        direction='row'
+        wrap='wrap'
       >
-        <Title order={3} ta='center' style={{ marginBottom: 20 }}>
-          Click to start processing
-        </Title>
-        <Button
-          onClick={handleProcessFile}
-          disabled={!isLoggedIn || !hasValidCredit || totalPages === 0}
-          fullWidth
-          size='lg'
-          my={30}
-          loading={isProcessing}
+        <CostSummary totalCount={totalPages} user={user} />
+        <Paper
+          style={{
+            maxWidth: 400,
+            margin: 'auto',
+            marginTop: 30,
+            padding: 20,
+            boxShadow: theme.shadows.sm,
+          }}
         >
-          Process Files
-        </Button>
-        <Text ta='center' c='red.4' fw={700}>
-          Warning: Do not refresh the page or turn off your device.
-        </Text>
-      </Paper>
-    </Container>
+          <Title order={3} ta='center' style={{ marginBottom: 20 }}>
+            Click to start processing
+          </Title>
+          <Button
+            onClick={handleProcessFile}
+            disabled={!isLoggedIn || !hasValidCredit || totalPages === 0}
+            fullWidth
+            size='lg'
+            my={30}
+            loading={isProcessing}
+          >
+            Process Files
+          </Button>
+          <Text ta='center' c='red.4' fw={700}>
+            Warning: Do not refresh the page or turn off your device.
+          </Text>
+        </Paper>
+      </Flex>
+    </Paper>
   );
 }

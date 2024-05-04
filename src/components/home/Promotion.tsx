@@ -15,17 +15,22 @@ import Link from 'next/link';
 export default function Promotion() {
   return (
     <>
-      <Divider my='md' />
       <Container my={100}>
-        <Title mb={30} className='text-2xl font-bold text-gray-800 md:text-3xl'>
-          Sign Up and Get $1 in Credits Free!
+        <Title
+          ta='center'
+          mb={30}
+          className='text-2xl font-bold text-gray-800 md:text-3xl'
+        >
+          Sign Up and Get 10 Pages Free
         </Title>
         <Text
           mb={25}
+          ta='center'
+          fw={500}
           className='text-md max-w-xl text-center text-gray-600 md:text-lg'
         >
-          Explore our OCR services with a complimentary credit on us. Experience
-          the difference in your translation workflow.
+          Explore our OCR services with complimentary credit on us. Experience
+          the difference in your workflow.
         </Text>
         <List
           mb={25}
@@ -33,7 +38,7 @@ export default function Promotion() {
           size='xl'
           center
           icon={
-            <ThemeIcon color='teal' size={35} radius='xl'>
+            <ThemeIcon color='#734AE8' size={35} radius='xl'>
               <IconCircleCheck />
             </ThemeIcon>
           }
@@ -50,17 +55,19 @@ export default function Promotion() {
           </ListItem>
           <ListItem className='flex items-center'>
             <Text component='span' className='ml-2'>
-              Experience the speed of our service firsthand.
+              Experience the accuracy of our service firsthand.
             </Text>
           </ListItem>
         </List>
         <Link href='/user/register' passHref>
           <Button
-            variant='filled'
-            size='md'
-            className='rounded-lg bg-blue-600 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-blue-700 focus:ring-4 focus:ring-blue-300'
+            variant='gradient'
+            gradient={{ deg: 135, from: '#89D4CF', to: '#734AE8' }}
+            size='lg'
+            radius='md'
+            mt='xl'
           >
-            Register Now
+            Get Started
           </Button>
         </Link>
       </Container>

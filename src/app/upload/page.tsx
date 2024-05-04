@@ -1,14 +1,15 @@
 'use client';
 import DisplayResults from '@/components/display/DisplayResults';
 import LoadingCover from '@/components/layout/LoadingCover';
-import CostSummary from '@/components/upload/CostSummary';
 import FileUpload from '@/components/upload/FileUpload';
 import ProcessText from '@/components/upload/ProcessText';
 import useUser from '@/store/useUser';
 import { checkPDFResults } from '@/utils/upload-helper';
-import { Flex, Paper } from '@mantine/core';
+import { Button, Container, Group, Paper, Stepper, Text } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { useState } from 'react';
+
+// TODO: deduct credits after processing
 
 export default function UploadPage() {
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -17,6 +18,12 @@ export default function UploadPage() {
   const [fileType, setFileType] = useState<string>('');
   const [showResults, setShowResults] = useState<boolean>(false);
   const [textJSON, setTextJSON] = useState<any>({ annotations: [] });
+  const [active, setActive] = useState(0);
+
+  const nextStep = () =>
+    setActive((current) => (current < 3 ? current + 1 : current));
+  const prevStep = () =>
+    setActive((current) => (current > 0 ? current - 1 : current));
 
   const { isLoggedIn, user } = useUser();
 
@@ -49,8 +56,9 @@ export default function UploadPage() {
       return;
     }
 
+    const fileType = localFile.type === 'application/pdf' ? 'pdf' : 'image';
+
     try {
-      const fileType = localFile.type === 'application/pdf' ? 'pdf' : 'image';
       setFileType(fileType);
 
       let result;
@@ -63,7 +71,7 @@ export default function UploadPage() {
         const formData = new FormData();
         formData.append('file', localFile);
         result = await sendFileToServer('api/vision-image', formData);
-        setTextJSON({ annotations: result.result.textAnnotations });
+        setTextJSON({ annotations: result.result.fullTextAnnotation });
       }
 
       showNotification({
@@ -74,19 +82,23 @@ export default function UploadPage() {
     } catch (error: any) {
       handleError(error.message);
     } finally {
-      checkPDFResults(localFile.name + user.userID, setIsProcessing).then(
-        async (pdfResult: any) => {
-          if (pdfResult) {
-            setTextJSON({
-              annotations: pdfResult.result.responses[0].fullTextAnnotation,
-            });
+      if (fileType === 'pdf') {
+        checkPDFResults(localFile.name + user.userID, setIsProcessing).then(
+          async (pdfResult: any) => {
+            if (pdfResult) {
+              setTextJSON({
+                annotations: pdfResult.result.responses[0].fullTextAnnotation,
+              });
 
-            handleDeleteFiles().then(() => {
-              processComplete();
-            });
+              handleDeleteFiles().then(() => {
+                processComplete();
+              });
+            }
           }
-        }
-      );
+        );
+      } else {
+        processComplete();
+      }
     }
   };
 
@@ -121,33 +133,67 @@ export default function UploadPage() {
   return (
     <Paper>
       <LoadingCover visible={isProcessing} />
+      <Container my={50}>
+        <Stepper active={active} onStepClick={setActive}>
+          <Stepper.Step
+            label='Step 1'
+            description='Upload your file'
+          ></Stepper.Step>
+          <Stepper.Step
+            label='Step 2'
+            description='Confirm & Process Document'
+          ></Stepper.Step>
+          <Stepper.Step
+            label='Step 4'
+            description='Download Finished Document'
+          ></Stepper.Step>
+          <Stepper.Completed>
+            Completed, click back button to get to previous step
+          </Stepper.Completed>
+        </Stepper>
+
+        <Group justify='center' mt='xl'>
+          {active !== 0 && (
+            <Button size='md' variant='default' onClick={prevStep}>
+              Back
+            </Button>
+          )}
+          {active !== 2 && (
+            <Button size='md' onClick={nextStep}>
+              Next Step
+            </Button>
+          )}
+        </Group>
+      </Container>
       {showResults ? (
-        <DisplayResults fileType={fileType} textJSON={textJSON} />
+        <DisplayResults textJSON={textJSON} />
       ) : (
         <>
-          <FileUpload
-            handleDeleteFiles={handleDeleteFiles}
-            setTotalPages={setTotalPages}
-            setLocalFile={setLocalFile}
-            user={user}
-            totalPages={totalPages}
-          />
-          <Flex
-            gap='md'
-            justify='center'
-            align='center'
-            direction='row'
-            wrap='wrap'
-          >
-            <CostSummary totalCount={totalPages} user={user} />
+          {active === 0 && (
+            <FileUpload
+              handleDeleteFiles={handleDeleteFiles}
+              setTotalPages={setTotalPages}
+              setLocalFile={setLocalFile}
+              user={user}
+              totalPages={totalPages}
+            />
+          )}
+          {active === 1 && (
             <ProcessText
               isLoggedIn={isLoggedIn}
               hasValidCredit={hasValidCredit}
               handleProcessFile={handleProcessFile}
               isProcessing={isProcessing}
               totalPages={totalPages}
+              user={user}
             />
-          </Flex>
+          )}
+
+          {active === 2 && (
+            <Text size='lg' fw='bold' ta='center'>
+              Please process documents to see them here.
+            </Text>
+          )}
         </>
       )}
     </Paper>

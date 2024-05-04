@@ -6,6 +6,7 @@ import { Button, Container, Flex, Group, Text, TextInput } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { collection, getDocs, limit, query, where } from 'firebase/firestore';
+import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 
@@ -120,6 +121,7 @@ const LoginPage = () => {
             Login
           </Button>
         </Group>
+        <Link href="/user/forgot" passHref><Text>Forgot Password?</Text></Link>
       </Flex>
     </Container>
   );

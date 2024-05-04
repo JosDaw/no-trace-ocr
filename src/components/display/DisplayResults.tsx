@@ -1,17 +1,15 @@
 import { Annotation } from '@/types/types';
-import { Alert, Center, Paper, Title } from '@mantine/core';
-import { IconAlertTriangle, IconInfoCircle } from '@tabler/icons-react';
-import TextDisplay from './TextDisplay';
+import { Alert, Button, Center, Paper, Title } from '@mantine/core';
+import { IconAlertTriangle, IconUpload } from '@tabler/icons-react';
+import Link from 'next/link';
 import TextEditor from './TextEditor';
 
 interface DisplayModalProps {
   textJSON: Annotation[] | any;
-  fileType: string;
 }
 
 export default function DisplayResults({
   textJSON,
-  fileType,
 }: DisplayModalProps) {
   return (
     <Paper my={50}>
@@ -23,24 +21,22 @@ export default function DisplayResults({
           variant='light'
           color='red'
           withCloseButton
-          title='Warning'
+          title='Warning - Please Read'
           icon={<IconAlertTriangle />}
         >
           For confidentiality purposes, no content is saved on OCRiginal
-          Translator. Closing this page will permanently delete the content
-          below.
+          Translator.
+          <br />
+          <br />
+          <strong>
+            Closing this page will permanently delete the content below.
+          </strong>
           <br />
           <br />
           Please use the download buttons to save your content.
         </Alert>
       </Center>
-      {fileType === 'image' &&
-        textJSON &&
-        Array.isArray(textJSON) &&
-        textJSON.map((text: any) => {
-          return <TextDisplay key={text.id} annotations={text.annotations} />;
-        })}
-      {fileType === 'pdf' && textJSON && (
+      {textJSON && (
         <TextEditor content={textJSON.annotations.text} />
       )}
     </Paper>

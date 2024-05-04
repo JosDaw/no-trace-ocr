@@ -1,5 +1,5 @@
 import { convertNewLinesToHTML } from '@/utils/text-helper';
-import { Container, Flex, Grid, SimpleGrid, Title } from '@mantine/core';
+import { Container, SimpleGrid, Title } from '@mantine/core';
 import { Link, RichTextEditor } from '@mantine/tiptap';
 import Highlight from '@tiptap/extension-highlight';
 import SubScript from '@tiptap/extension-subscript';
@@ -8,7 +8,7 @@ import TextAlign from '@tiptap/extension-text-align';
 import Underline from '@tiptap/extension-underline';
 import { useEditor } from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import DownloadResults from './DownloadResults';
 import PreviewDisplay from './PreviewDisplay';
 

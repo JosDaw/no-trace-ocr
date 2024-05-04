@@ -10,10 +10,18 @@ import {
   MantineProvider,
 } from '@mantine/core';
 import { Notifications } from '@mantine/notifications';
+import { Fira_Sans } from 'next/font/google';
+
+const openSans = Fira_Sans({
+  weight: ['400', '500', '600', '700'],
+  style: 'normal',
+  subsets: ['latin'],
+});
 
 export const metadata = {
-  title: 'My Mantine app',
-  description: 'I have followed setup instructions carefully',
+  title: 'No Trace OCR',
+  description:
+    'No Trace OCR is a privacy-focused OCR service that does not store your data. Securely your files or images and get the text extracted from them, quickly, easily, and affordably.',
 };
 
 const myColor: MantineColorsTuple = [
@@ -33,7 +41,7 @@ const theme = createTheme({
   colors: {
     myColor,
   },
-  fontFamily: 'Montserrat, sans-serif',
+  fontFamily: openSans.style.fontFamily,
   defaultRadius: 'md',
 });
 
@@ -47,7 +55,7 @@ export default function RootLayout({
       <head>
         <ColorSchemeScript />
       </head>
-      <body>
+      <body className={openSans.className}>
         <MantineProvider theme={theme}>
           <Notifications />
           <AppLayout>{children}</AppLayout>

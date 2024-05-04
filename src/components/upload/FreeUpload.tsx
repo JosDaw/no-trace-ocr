@@ -1,5 +1,4 @@
 'use client';
-import { LoggedInUser } from '@/types/types';
 import {
   Button,
   Container,
@@ -11,32 +10,29 @@ import {
 } from '@mantine/core';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { showNotification } from '@mantine/notifications';
-import {
-  IconCircleNumber1,
-  IconCloudUpload,
-  IconDownload,
-  IconTrashX,
-  IconX,
-} from '@tabler/icons-react';
+import { IconCloudUpload, IconDownload, IconX } from '@tabler/icons-react';
 import { useCallback, useRef, useState } from 'react';
+import { Document, pdfjs } from 'react-pdf';
 
-interface FileUploadProps {
-  handleDeleteFiles: () => void;
-  setTotalPages: (totalPages: number) => void;
-  setLocalFile: (file: File | null) => void;
-  user: LoggedInUser;
-  totalPages: number;
+// Set workerSrc for PDF.js
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
+
+interface FreeUploadProps {
+  handleProcessFile: (file: File) => void;
+  uniqueUserId: string;
+  isProcessing: boolean;
 }
 
-export default function FileUpload({
-  handleDeleteFiles,
-  setTotalPages,
-  setLocalFile,
-  user,
-  totalPages,
-}: FileUploadProps) {
+export default function FreeUpload({
+  handleProcessFile,
+  uniqueUserId,
+  isProcessing,
+}: FreeUploadProps) {
+  const [totalPages, setTotalPages] = useState<number>(0);
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
+  const [fileType, setFileType] = useState<string>('');
+
   const theme = useMantineTheme();
   const openRef = useRef<() => void>(null);
 
@@ -47,6 +43,13 @@ export default function FileUpload({
       setFile(droppedFile); // Set the file in state, replacing any previous
     }
   }, []);
+
+  /**
+   * Handle page counter
+   */
+  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
+    setTotalPages(numPages);
+  };
 
   // Handle file upload
   const handleSubmit = async () => {
@@ -60,85 +63,81 @@ export default function FileUpload({
     }
 
     setUploading(true);
-    setLocalFile(file);
 
     try {
-      let pageCount = 0;
+      setFileType(file.type === 'application/pdf' ? 'pdf' : 'image');
       if (file.type === 'application/pdf') {
-        const formData = new FormData();
-        formData.append('pdf', file);
-
-        // Fetch page count for PDF
-        const pageCountResponse = await fetch('api/page-counter', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (!pageCountResponse.ok) {
-          throw new Error('Failed to get page count');
+        if (totalPages > 1) {
+          showNotification({
+            title: 'Error processing file',
+            message:
+              'Please register for a free account to process PDFs with multiple pages.',
+            color: 'red',
+          });
+          return;
         }
 
-        const pageCountResult = await pageCountResponse.json();
-        pageCount = pageCountResult.pageCount;
+        if (totalPages === 0) {
+          showNotification({
+            title: 'Error processing file',
+            message: 'Please upload a PDF with at least 1 page.',
+            color: 'red',
+          });
+          return;
+        }
 
         // Upload the PDF if it has more than 0 pages
-        if (pageCount > 0) {
-          const uploadFormData = new FormData();
-          uploadFormData.append('file', file);
-          uploadFormData.append('userId', user.userID);
+        const uploadFormData = new FormData();
+        uploadFormData.append('file', file);
+        uploadFormData.append('userId', uniqueUserId);
 
-          const uploadResponse = await fetch('api/vision-pdf-upload', {
-            method: 'POST',
-            body: uploadFormData,
-          });
+        const uploadResponse = await fetch('api/vision-pdf-upload', {
+          method: 'POST',
+          body: uploadFormData,
+        });
 
-          if (!uploadResponse.ok) {
-            throw new Error('Failed to upload PDF');
-          }
+        if (!uploadResponse.ok) {
+          throw new Error('Failed to upload PDF');
         }
-      } else {
-        // Assume non-PDF files are images with 1 page
-        pageCount = 1;
       }
 
-      // Update total pages with the page count of the single file
-      setTotalPages(pageCount);
-
-      showNotification({
-        title: 'Upload Complete',
-        message: 'Please continue to the next step.',
-        color: 'green',
-      });
+      // Handle processing
+      try {
+        handleProcessFile(file);
+      } catch (error: any) {
+        setUploading(false);
+        showNotification({
+          title: 'Error processing file',
+          message: error.message,
+          color: 'red',
+        });
+      } finally {
+        setUploading(false);
+      }
     } catch (error: any) {
+      setUploading(false);
       showNotification({
-        title: 'Error processing file',
+        title: 'Error uploading file',
         message: error.message,
         color: 'red',
       });
-    } finally {
-      setUploading(false);
     }
   };
 
   // Handle file upload cancellation
   const handleCancel = () => {
     setFile(null);
-    setLocalFile(null);
-  };
-
-  const handleDelete = () => {
-    handleDeleteFiles();
-    setFile(null);
-    setLocalFile(null);
   };
 
   return (
     <Container my={25}>
-      <Title ta='center' my={20}>
-        <IconCircleNumber1 size={50} color={theme.colors.red[6]} /> Upload your
-        file
+      <Title ta='center' my={10}>
+        Free OCR Processing
       </Title>
-      <div style={{ position: 'relative', marginBottom: '30px' }}>
+      <Title ta='center' size='md'>
+        (1 Page/Image per File)
+      </Title>
+      <div style={{ position: 'relative', marginTop: 50 }}>
         <Dropzone
           openRef={openRef}
           onDrop={handleDrop}
@@ -188,37 +187,20 @@ export default function FileUpload({
             <Text ta='center' fw={700} fz='lg' mt='xl'>
               <Dropzone.Accept>Drop file here</Dropzone.Accept>
               <Dropzone.Reject>
-                File must be a PDF, JPEG, or PNG less than 30MB
+                Free Upload only supports PDF, JPEG, and PNG files that contain
+                just 1 page/image.
               </Dropzone.Reject>
               <Dropzone.Idle>Upload file</Dropzone.Idle>
             </Text>
             <Text ta='center' fz='sm' mt='xs' c='dimmed'>
               Drag and drop files here to upload. We can accept only{' '}
-              <i>.pdf, .jpeg, .png</i> files that are less than 30mb in size.
+              <i>.pdf, .jpeg, .png</i> files that contain just 1 page/image.
             </Text>
             <Text ta='center' fz='sm' mt='xs' fw={700} c='red'>
               All files are deleted after processing.
             </Text>
           </div>
         </Dropzone>
-        {file !== null && (
-          <Button
-            style={{
-              position: 'absolute',
-              bottom: rem('-20px'),
-              left: '10%',
-              transform: 'translateX(-10%)',
-            }}
-            color='red'
-            size='md'
-            radius='xl'
-            onClick={handleDelete}
-            disabled={uploading || file === null || totalPages === 0}
-          >
-            <IconTrashX style={{ marginRight: rem(5) }} />
-            Delete
-          </Button>
-        )}
         <Button
           style={{
             position: 'absolute',
@@ -230,10 +212,12 @@ export default function FileUpload({
           size='md'
           radius='xl'
           onClick={handleSubmit}
-          disabled={uploading || file === null || totalPages > 0}
+          disabled={
+            uploading || file === null || isProcessing
+          }
           loading={uploading}
         >
-          {totalPages > 0 ? 'Uploaded File' : 'Start Upload'}
+          Process File
         </Button>
         {file !== null && (
           <Button
@@ -247,13 +231,19 @@ export default function FileUpload({
             size='md'
             radius='xl'
             onClick={handleCancel}
-            disabled={uploading || totalPages > 0}
+            disabled={uploading || totalPages === 0 || isProcessing}
           >
             <IconX style={{ marginRight: rem(5) }} />
             Cancel
           </Button>
         )}
       </div>
+      {file && fileType === 'pdf' && (
+        <Document
+          file={file}
+          onLoadSuccess={onDocumentLoadSuccess}
+        ></Document>
+      )}
     </Container>
   );
 }

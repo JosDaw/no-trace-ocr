@@ -10,6 +10,7 @@ import {
 } from '@mantine/core';
 import {
   IconBrandSpeedtest,
+  IconFileTypeDoc,
   IconLock,
   IconTagsOff,
   IconTextRecognition,
@@ -22,25 +23,25 @@ export default function FeaturesList() {
       icon: <IconTextRecognition size={40} stroke={2} />,
       title: 'High Accuracy',
       description:
-        'Our OCR technology ensures high accuracy in text recognition, crucial for effective translations.',
+        'We utilize the latest OCR technology to ensure high accuracy in text recognition from PDFs and images.',
     },
     {
       icon: <IconLock size={40} stroke={2} />,
       title: 'Secure Processing',
       description:
-        'All documents are processed securely, ensuring the confidentiality of your sensitive data.',
+        'All documents are processed securely and immediately deleted after the OCR process is completed, ensuring the confidentiality of your sensitive data.',
     },
     {
-      icon: <IconBrandSpeedtest size={40} stroke={2} />,
-      title: 'Fast Turnaround',
+      icon: <IconFileTypeDoc size={40} stroke={2} />,
+      title: 'Rich Text Editing Tools',
       description:
-        'Enjoy rapid processing speeds that don’t compromise on quality, boosting your productivity.',
+        'Easily edit and format your extracted text with our rich text editing tools, and download your changes in a range of formats.',
     },
     {
       icon: <IconTagsOff size={40} stroke={2} />,
       title: 'Affordable Pricing',
       description:
-        'Our OCR services are priced competitively, making it accessible to all professional translators.',
+        'Our OCR services are priced competitively, designed for professionals at all levels.',
     },
   ];
 
@@ -68,24 +69,13 @@ export default function FeaturesList() {
       <Grid gutter={80}>
         <Grid.Col span={{ base: 12, md: 5 }}>
           <Title mb={25} className='text-xxl font-bold' order={2}>
-            Essential Features for Freelance Translators
+            Essential Features for Professionals
           </Title>
           <Text c='dimmed'>
             Our OCR technology is designed to increase your productivity and
-            accuracy in translations. Here are some of the key features that set
-            us apart.
+            accuracy, without sacrificing security or confidentaility. Here are
+            some of the key features that set us apart.
           </Text>
-          <Link href='/user/register' passHref>
-            <Button
-              variant='gradient'
-              gradient={{ deg: 135, from: '#89D4CF', to: '#734AE8' }}
-              size='lg'
-              radius='md'
-              mt='xl'
-            >
-              Get Started
-            </Button>
-          </Link>
         </Grid.Col>
         <Grid.Col span={{ base: 12, md: 7 }}>
           <SimpleGrid cols={{ base: 1, md: 2 }} spacing={30}>

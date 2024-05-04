@@ -24,10 +24,11 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     return new NextResponse(JSON.stringify({ pageCount: pdf.numPages }), {
       status: 200,
     });
-  } catch (error) {
-    console.error('Failed to process PDF:', error);
+  } catch (error: any) {
     return new NextResponse(
-      JSON.stringify({ error: 'Failed to process the file' }),
+      JSON.stringify({
+        error: 'Failed to process the file. Error: ' + error.message,
+      }),
       { status: 500 }
     );
   }
