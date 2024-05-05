@@ -21,7 +21,7 @@ export default function Promotion() {
           mb={30}
           className='text-2xl font-bold text-gray-800 md:text-3xl'
         >
-          Sign Up and Get 10 Pages Free
+          Use Our OCR Services for Free 
         </Title>
         <Text
           mb={25}
@@ -29,7 +29,7 @@ export default function Promotion() {
           fw={500}
           className='text-md max-w-xl text-center text-gray-600 md:text-lg'
         >
-          Explore our OCR services with complimentary credit on us. Experience
+          Explore our OCR services with free uploads. Experience
           the difference in your workflow.
         </Text>
         <List
@@ -50,7 +50,7 @@ export default function Promotion() {
           </ListItem>
           <ListItem className='flex items-center'>
             <Text component='span' className='ml-2'>
-              Securely process several pages at no cost.
+              Securely process 1 page files at no cost.
             </Text>
           </ListItem>
           <ListItem className='flex items-center'>
@@ -59,7 +59,7 @@ export default function Promotion() {
             </Text>
           </ListItem>
         </List>
-        <Link href='/user/register' passHref>
+        <Link href='/free' passHref>
           <Button
             variant='gradient'
             gradient={{ deg: 135, from: '#89D4CF', to: '#734AE8' }}
@@ -67,7 +67,7 @@ export default function Promotion() {
             radius='md'
             mt='xl'
           >
-            Get Started
+            Try Free Uploads
           </Button>
         </Link>
       </Container>
