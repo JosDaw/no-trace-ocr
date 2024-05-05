@@ -15,3 +15,4 @@ Welcome to No Trace OCR, a secure, convenient, and affordable way to convert doc
 TODO:
 
 - Consider Amazon Textract???
+- Add font options for editor

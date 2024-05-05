@@ -50,6 +50,7 @@
     "react-dom": "^18",
     "react-konva": "^18.2.10",
     "react-pdf": "^8.0.0",
+    "request": "^2.88.2",
     "zustand": "^4.5.2"
   },
   "devDependencies": {

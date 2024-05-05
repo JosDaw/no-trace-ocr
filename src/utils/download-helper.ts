@@ -1,7 +1,6 @@
 import { showNotification } from '@mantine/notifications';
 import { saveAs } from 'file-saver';
 import { asBlob } from 'html-docx-js-typescript';
-import html2pdf from 'html2pdf.js';
 
 /**
  * Downloads the HTML content as a file.
@@ -74,7 +73,7 @@ export function printHtmlContent(htmlContent: any) {
  * Downloads the HTML content as a PDF document.
  * If no HTML content is available, it shows an error notification.
  */
-export function downloadPdf(htmlContent: any) {
+export async function downloadPdf(htmlContent: any) {
   if (!htmlContent) {
     showNotification({
       title: 'Error!',
@@ -84,6 +83,8 @@ export function downloadPdf(htmlContent: any) {
     return;
   }
 
+  const {default: html2pdf} = await import('html2pdf.js');
+  
   try {
     html2pdf()
       .from(htmlContent)
