@@ -66,7 +66,7 @@ export default function FeaturesList() {
 
   return (
     <Container my={100}>
-      <Grid gutter={80}>
+      <Grid>
         <Grid.Col span={{ base: 12, md: 5 }}>
           <Title mb={25} className='text-xxl font-bold' order={2}>
             Essential Features for Professionals

@@ -2,7 +2,7 @@
 import { database, firebaseApp } from '@/config/firebase';
 import useUser from '@/store/useUser';
 import { getFirebaseError } from '@/utils/text-helper';
-import { Button, Container, Flex, Group, Text, TextInput } from '@mantine/core';
+import { Button, Container, Flex, Group, Text, TextInput, Title } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { collection, getDocs, limit, query, where } from 'firebase/firestore';
@@ -90,9 +90,9 @@ const LoginPage = () => {
 
   return (
     <Container mx='auto' mt='xl'>
-      <Text size='xl' ta='center' fw={900} style={{ marginBottom: 20 }}>
+      <Title ta='center' mb={45}>
         Login
-      </Text>
+      </Title>
       <Flex
         gap='md'
         justify='flex-start'

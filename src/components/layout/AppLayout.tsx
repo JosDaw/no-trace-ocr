@@ -8,6 +8,7 @@ import {
   Button,
   Group,
   Loader,
+  Stack,
   Text,
   Title,
 } from '@mantine/core';
@@ -125,7 +126,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
 
       <AppShell.Navbar py='md' px={4}>
         {isLoggedIn ? (
-          <Group ml='xl' gap={6} visibleFrom='sm'>
+          <Stack ml={8}>
             {loading ? (
               <Loader />
             ) : (
@@ -134,25 +135,25 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               </Text>
             )}
             <Link href='/free' passHref>
-              <Button color='green'>Free Upload</Button>
+              <Button color='green' onClick={toggle}>Free Upload</Button>
             </Link>
             <Link href='/upload' passHref>
-              <Button>Upload</Button>
+              <Button onClick={toggle}>Upload</Button>
             </Link>
             <UserMenu />
-          </Group>
+          </Stack>
         ) : (
-          <Group ml='xl' gap={8} visibleFrom='sm'>
+          <Stack ml={8}>
             <Link href='/free' passHref>
-              <Button color='green'>Free Upload</Button>
+              <Button color='green' onClick={toggle}>Free Upload</Button>
             </Link>
             <Link href='/user/register' passHref>
-              <Button>Register</Button>
+              <Button onClick={toggle}>Register</Button>
             </Link>
             <Link href='/user/login' passHref>
-              <Button>Login</Button>
+              <Button onClick={toggle}>Login</Button>
             </Link>
-          </Group>
+          </Stack>
         )}
       </AppShell.Navbar>
 

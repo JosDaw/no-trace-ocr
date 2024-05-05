@@ -77,7 +77,7 @@ export function UserMenu() {
         intent: 'capture',
       }}
     >
-      <Group justify='center'>
+      <Group>
         <Menu
           withArrow
           width={300}
