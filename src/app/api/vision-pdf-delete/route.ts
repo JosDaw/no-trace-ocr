@@ -19,6 +19,7 @@ const bucketName = process.env.BUCKET_NAME || '';
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const body = await req.json();
   const fileName = body.fileName;
+  const totalPages = body.totalPages;
 
   try {
     let totalDeleted = 0;
@@ -32,11 +33,24 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     }
 
     // Deletes the file from the bucket for output
-    const outputFile = `output/${fileName}-output-1-to-1.json`;
-    const outputExists = await bucket.file(outputFile).exists();
-    if (outputExists[0]) {
-      await bucket.file(outputFile).delete();
-      totalDeleted++;
+
+    // If there are multiple pages, delete all the files
+    if (totalPages > 1) {
+      for (let i = 1; i <= totalPages; i++) {
+        const outputFile = `output/${fileName}-output-${i}-to-${i}.json`;
+        const outputExists = await bucket.file(outputFile).exists();
+        if (outputExists[0]) {
+          await bucket.file(outputFile).delete();
+          totalDeleted++;
+        }
+      }
+    } else {
+      const outputFile = `output/${fileName}-output-1-to-1.json`;
+      const outputExists = await bucket.file(outputFile).exists();
+      if (outputExists[0]) {
+        await bucket.file(outputFile).delete();
+        totalDeleted++;
+      }
     }
 
     return new NextResponse(

@@ -19,7 +19,11 @@ const bucketName = process.env.BUCKET_NAME || '';
 export async function POST(req: NextRequest): Promise<NextResponse> {
   const body = await req.json();
   const fileName = body.fileName;
-  const outputPrefix = `output/${fileName}-output-1-to-1.json`;
+  const currentPage = body.currentPage;
+  const outputPrefix =
+    currentPage === 1
+      ? `output/${fileName}-output-1-to-1.json`
+      : `output/${fileName}-output-${currentPage}-to-${currentPage}.json`;
 
   try {
     const bucket = storage.bucket(bucketName);

@@ -6,9 +6,19 @@ import ProcessText from '@/components/upload/ProcessText';
 import { database } from '@/config/firebase';
 import useUser from '@/store/useUser';
 import { checkPDFResults } from '@/utils/upload-helper';
-import { Button, Container, Group, Paper, Stepper, Text } from '@mantine/core';
+import {
+  Alert,
+  Button,
+  Center,
+  Container,
+  Group,
+  Paper,
+  Stepper,
+  Text,
+} from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
+import { IconAlertTriangle, IconUpload } from '@tabler/icons-react';
 import {
   addDoc,
   collection,
@@ -22,10 +32,10 @@ export default function UploadPage() {
   const [totalPages, setTotalPages] = useState<number>(0);
   const [localFile, setLocalFile] = useState<File | null>(null);
   const [isProcessing, setIsProcessing] = useState<boolean>(false);
-  const [fileType, setFileType] = useState<string>('');
   const [showResults, setShowResults] = useState<boolean>(false);
   const [textJSON, setTextJSON] = useState<any>({ annotations: [] });
   const [active, setActive] = useState(0);
+  const [refreshKey, setRefreshKey] = useState<number>(0);
 
   const env = process.env.NODE_ENV || 'development';
   const paypalClientId =
@@ -91,8 +101,6 @@ export default function UploadPage() {
     const fileType = localFile.type === 'application/pdf' ? 'pdf' : 'image';
 
     try {
-      setFileType(fileType);
-
       let result;
       if (fileType === 'pdf') {
         result = await sendFileToServer(
@@ -107,8 +115,10 @@ export default function UploadPage() {
       }
 
       const totalCost = totalPages * costPerItem;
+      const finalCredit = Math.floor(user.credit - totalCost);
+
       // Update zustand credit
-      updateCredit(user.credit - totalCost);
+      updateCredit(finalCredit);
 
       const updateRef = doc(
         collection(database, 'user'),
@@ -117,7 +127,7 @@ export default function UploadPage() {
 
       // Update credit first
       await updateDoc(updateRef, {
-        credit: user.credit - totalCost,
+        credit: finalCredit,
         dateUpdated: Timestamp.now(),
       });
 
@@ -131,18 +141,20 @@ export default function UploadPage() {
       handleError(error.message);
     } finally {
       if (fileType === 'pdf') {
-        checkPDFResults(localFile.name + user.userID, setIsProcessing).then(
-          async (pdfResult: any) => {
-            if (pdfResult) {
-              setTextJSON({
-                annotations: pdfResult.result.responses[0].fullTextAnnotation,
-              });
-              handleDeleteFiles().then(() => {
-                processComplete();
-              });
-            }
+        checkPDFResults(
+          localFile.name + user.userID,
+          setIsProcessing,
+          totalPages
+        ).then(async (pdfResult: any) => {
+          if (pdfResult) {
+            setTextJSON({
+              annotations: pdfResult,
+            });
+            handleDeleteFiles().then(() => {
+              processComplete();
+            });
           }
-        );
+        });
       } else {
         processComplete();
       }
@@ -167,7 +179,10 @@ export default function UploadPage() {
 
     await sendFileToServer(
       'api/vision-pdf-delete',
-      JSON.stringify({ fileName: localFile.name + user.userID })
+      JSON.stringify({
+        fileName: localFile.name + user.userID,
+        totalPages: totalPages,
+      })
     );
 
     showNotification({
@@ -175,6 +190,13 @@ export default function UploadPage() {
       message: 'Your content has been deleted and is secure.',
       color: 'green',
     });
+  };
+
+  const handleRefresh = () => {
+    setLocalFile(null);
+    setTotalPages(0);
+    setShowResults(false);
+    setRefreshKey((oldKey) => oldKey + 1); // Increment refresh key to force re-render
   };
 
   return (
@@ -224,7 +246,12 @@ export default function UploadPage() {
                 )}
               </Group>
             </Container>
-            {active === 0 && (
+            <div
+              style={{
+                visibility: active === 0 ? 'visible' : 'hidden',
+                display: active === 0 ? 'block' : 'none',
+              }}
+            >
               <FileUpload
                 handleDeleteFiles={handleDeleteFiles}
                 setTotalPages={setTotalPages}
@@ -232,8 +259,9 @@ export default function UploadPage() {
                 user={user}
                 totalPages={totalPages}
                 nextStep={nextStep}
+                key={refreshKey}
               />
-            )}
+            </div>
             {active === 1 && (
               <ProcessText
                 isLoggedIn={isLoggedIn}
@@ -242,15 +270,33 @@ export default function UploadPage() {
                 isProcessing={isProcessing}
                 totalPages={totalPages}
                 user={user}
+                file={localFile}
               />
             )}
             {active === 2 && (
-              <Text size='lg' fw='bold' ta='center'>
-                Please process documents to see them here.
-              </Text>
+              <Center>
+                <Alert
+                  color='red'
+                  title='No files uploaded'
+                  icon={<IconAlertTriangle />}
+                >
+                  <Text>Please upload and process a file to download it.</Text>
+                </Alert>
+              </Center>
             )}
           </>
         )}
+        <Center my={70}>
+          <Button
+            size='lg'
+            variant='light'
+            color='pink'
+            onClick={handleRefresh}
+          >
+            <IconUpload style={{ marginRight: 8 }} />
+            Upload Another File
+          </Button>
+        </Center>
       </Paper>
     </PayPalScriptProvider>
   );

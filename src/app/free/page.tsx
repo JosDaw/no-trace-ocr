@@ -78,11 +78,11 @@ export default function FreeUploadPage() {
       handleError(error.message);
     } finally {
       if (fileType === 'pdf') {
-        checkPDFResults(file.name + uniqueUserId, setIsProcessing).then(
+        checkPDFResults(file.name + uniqueUserId, setIsProcessing, 1).then(
           async (pdfResult: any) => {
             if (pdfResult) {
               setTextJSON({
-                annotations: pdfResult.result.responses[0].fullTextAnnotation,
+                annotations: pdfResult,
               });
 
               handleDeleteFiles(file).then(() => {
@@ -115,7 +115,7 @@ export default function FreeUploadPage() {
 
     await sendFileToServer(
       'api/vision-pdf-delete',
-      JSON.stringify({ fileName: file.name + uniqueUserId })
+      JSON.stringify({ fileName: file.name + uniqueUserId, totalPages: 1 })
     );
 
     showNotification({

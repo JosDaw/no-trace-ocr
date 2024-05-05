@@ -17,7 +17,6 @@ import {
   IconCircleCheck,
   IconMoodHappyFilled,
   IconMoodSadFilled,
-  IconTriangle,
 } from '@tabler/icons-react';
 import { applyActionCode, getAuth, onAuthStateChanged } from 'firebase/auth';
 import { Timestamp, addDoc, collection } from 'firebase/firestore';

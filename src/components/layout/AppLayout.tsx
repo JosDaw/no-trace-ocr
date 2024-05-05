@@ -18,13 +18,14 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import { Footer } from './Footer';
 import Logo from './Logo';
+import { UserMenu } from './UserMenu';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
   const [loading, setLoading] = useState<boolean>(false);
 
   const [opened, { toggle }] = useDisclosure();
   const { isLoggedIn, user } = useUser();
-  const logoutUser = useUser((state: any) => state.logoutUser);
+
   const updateCredit = useUser((state: any) => state.updateCredit);
 
   useEffect(() => {
@@ -103,9 +104,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 <Link href='/upload' passHref>
                   <Button>Upload</Button>
                 </Link>
-                <Button color='red' onClick={logoutUser}>
-                  Logout
-                </Button>
+                <UserMenu />
               </Group>
             ) : (
               <Group ml='xl' gap={8} visibleFrom='sm'>
@@ -140,9 +139,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             <Link href='/upload' passHref>
               <Button>Upload</Button>
             </Link>
-            <Button color='red' onClick={logoutUser}>
-              Logout
-            </Button>
+            <UserMenu />
           </Group>
         ) : (
           <Group ml='xl' gap={8} visibleFrom='sm'>

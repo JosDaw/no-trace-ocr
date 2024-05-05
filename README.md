@@ -14,5 +14,4 @@ Welcome to No Trace OCR, a secure, convenient, and affordable way to convert doc
 
 TODO:
 
-- Account page (delete account function)
 - Consider Amazon Textract???

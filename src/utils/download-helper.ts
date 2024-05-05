@@ -19,7 +19,7 @@ export function downloadHtmlContent(htmlContent: any) {
 
   try {
     const blob = new Blob([htmlContent], { type: 'text/html' });
-    saveAs(blob, 'content.html');
+    saveAs(blob, 'no-trace-ocr.html');
   } catch (error: any) {
     showNotification({
       title: 'Error!',
@@ -90,7 +90,7 @@ export function downloadPdf(htmlContent: any) {
       .set({
         margin: 1,
         pagebreak: { mode: ['css', 'legacy'] },
-        filename: 'document.pdf',
+        filename: 'no-trace-ocr.pdf',
         html2canvas: {
           scale: 2, // Increase scale for better resolution
           logging: true, // Enable logging for debugging purposes
@@ -139,7 +139,7 @@ export function downloadAsDoc(htmlContent: any) {
     const file = new Blob([docContent], { type: 'application/msword' });
 
     element.href = URL.createObjectURL(file);
-    element.download = 'document.doc'; // Changed file name for clarity
+    element.download = 'no-trace-ocr.doc'; // Changed file name for clarity
     document.body.appendChild(element);
     element.click();
 
@@ -180,7 +180,7 @@ export function downloadAsTxt(htmlContent: any) {
     const file = new Blob([textContent], { type: 'text/plain' });
 
     element.href = URL.createObjectURL(file);
-    element.download = 'content.txt';
+    element.download = 'no-trace-ocr.txt';
 
     document.body.appendChild(element); // Add element to the DOM necessary for Firefox
     element.click(); // Trigger the download
@@ -228,7 +228,7 @@ export async function downloadAsDocx(htmlContent: any) {
     const url = URL.createObjectURL(contentBlob);
     const link = document.createElement('a');
     link.href = url;
-    link.download = 'document.docx';
+    link.download = 'no-trace-ocr.docx';
 
     document.body.appendChild(link);
     link.click();

@@ -1,5 +1,6 @@
 'use client';
 import {
+  Alert,
   Button,
   Container,
   Group,
@@ -10,7 +11,12 @@ import {
 } from '@mantine/core';
 import { Dropzone, MIME_TYPES } from '@mantine/dropzone';
 import { showNotification } from '@mantine/notifications';
-import { IconCloudUpload, IconDownload, IconX } from '@tabler/icons-react';
+import {
+  IconAlertTriangle,
+  IconCloudUpload,
+  IconDownload,
+  IconX,
+} from '@tabler/icons-react';
 import { useCallback, useRef, useState } from 'react';
 import { Document, pdfjs } from 'react-pdf';
 
@@ -31,7 +37,6 @@ export default function FreeUpload({
   const [totalPages, setTotalPages] = useState<number>(0);
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
-  const [fileType, setFileType] = useState<string>('');
 
   const theme = useMantineTheme();
   const openRef = useRef<() => void>(null);
@@ -58,6 +63,7 @@ export default function FreeUpload({
         title: 'No file selected',
         message: 'Please select a file to upload.',
         color: 'red',
+        autoClose: 5000,
       });
       return;
     }
@@ -65,7 +71,6 @@ export default function FreeUpload({
     setUploading(true);
 
     try {
-      setFileType(file.type === 'application/pdf' ? 'pdf' : 'image');
       if (file.type === 'application/pdf') {
         if (totalPages > 1) {
           showNotification({
@@ -73,7 +78,9 @@ export default function FreeUpload({
             message:
               'Please register for an account to process PDFs with multiple pages.',
             color: 'red',
+            autoClose: 5000,
           });
+          setUploading(false);
           return;
         }
 
@@ -82,7 +89,9 @@ export default function FreeUpload({
             title: 'Error processing file',
             message: 'Please upload a PDF with at least 1 page.',
             color: 'red',
+            autoClose: 5000,
           });
+          setUploading(false);
           return;
         }
 
@@ -110,6 +119,7 @@ export default function FreeUpload({
           title: 'Error processing file',
           message: error.message,
           color: 'red',
+          autoClose: 5000,
         });
       } finally {
         setUploading(false);
@@ -120,6 +130,7 @@ export default function FreeUpload({
         title: 'Error uploading file',
         message: error.message,
         color: 'red',
+        autoClose: 5000,
       });
     }
   };
@@ -127,6 +138,7 @@ export default function FreeUpload({
   // Handle file upload cancellation
   const handleCancel = () => {
     setFile(null);
+    setTotalPages(0);
   };
 
   return (
@@ -137,6 +149,17 @@ export default function FreeUpload({
       <Title ta='center' size='md'>
         (1 Page/Image per File)
       </Title>
+      {totalPages > 1 && (
+        <Alert
+          color='red'
+          title='Cannot Upload File'
+          icon={<IconAlertTriangle />}
+        >
+          Free upload only supports 1 page documents!
+          <br />
+          Please register for an account to process PDFs with multiple pages.
+        </Alert>
+      )}
       <div style={{ position: 'relative', marginTop: 50 }}>
         <Dropzone
           openRef={openRef}
@@ -212,10 +235,12 @@ export default function FreeUpload({
           size='md'
           radius='xl'
           onClick={handleSubmit}
-          disabled={uploading || file === null || isProcessing}
+          disabled={
+            uploading || file === null || isProcessing || totalPages > 1
+          }
           loading={uploading}
         >
-          Process File
+          {totalPages > 1 && 'Cannot'} Process File
         </Button>
         {file !== null && (
           <Button
@@ -236,7 +261,7 @@ export default function FreeUpload({
           </Button>
         )}
       </div>
-      {file && fileType === 'pdf' && (
+      {file && file.type === 'application/pdf' && (
         <Document file={file} onLoadSuccess={onDocumentLoadSuccess}></Document>
       )}
     </Container>

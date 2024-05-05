@@ -69,6 +69,7 @@ export default function FileUpload({
         title: 'No file selected',
         message: 'Please select a file to upload.',
         color: 'red',
+        autoClose: 5000,
       });
       return;
     }
@@ -83,6 +84,7 @@ export default function FileUpload({
             title: 'Error processing file',
             message: 'Please upload a PDF with at least 1 page.',
             color: 'red',
+            autoClose: 5000,
           });
           return;
         }
@@ -115,6 +117,7 @@ export default function FileUpload({
         title: 'Error processing file',
         message: error.message,
         color: 'red',
+        autoClose: 5000,
       });
     } finally {
       setUploading(false);
@@ -191,12 +194,14 @@ export default function FileUpload({
               <Dropzone.Reject>
                 File must be a PDF, JPEG, or PNG less than 30MB
               </Dropzone.Reject>
-              <Dropzone.Idle>Upload file</Dropzone.Idle>
+              {file === null && <Dropzone.Idle>Drag & Drop File</Dropzone.Idle>}
             </Text>
-            <Text ta='center' fz='sm' mt='xs' c='dimmed'>
-              Drag and drop files here to upload. We can accept only{' '}
-              <i>.pdf, .jpeg, .png</i> files that are less than 30mb in size.
-            </Text>
+            {file === null && (
+              <Text ta='center' fz='sm' mt='xs' c='dimmed'>
+                Drag and drop files here to upload. We can accept only{' '}
+                <i>.pdf, .jpeg, .png</i> files that are less than 30mb in size.
+              </Text>
+            )}
             <Text ta='center' fz='sm' mt='xs' fw={700} c='red'>
               All files are deleted after processing.
             </Text>
@@ -234,7 +239,7 @@ export default function FileUpload({
           disabled={uploading || file === null}
           loading={uploading}
         >
-          {file !== null ? 'Upload File' : 'Continue to Next Step'}
+          Upload File
         </Button>
         {file !== null && (
           <Button

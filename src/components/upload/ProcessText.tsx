@@ -2,7 +2,7 @@ import { LoggedInUser } from '@/types/types';
 import {
   Alert,
   Button,
-  Container,
+  Center,
   Flex,
   Paper,
   Text,
@@ -25,6 +25,7 @@ interface ProcessTextProps {
   isProcessing: boolean;
   totalPages: number;
   user: LoggedInUser;
+  file: File | null;
 }
 
 export default function ProcessText({
@@ -34,63 +35,78 @@ export default function ProcessText({
   isProcessing,
   totalPages,
   user,
+  file,
 }: ProcessTextProps) {
   const theme = useMantineTheme();
 
   return (
     <Paper my={50}>
-      <Title ta='center' my={20}>
-        <IconCircleNumber2 size={50} color={theme.colors.green[6]} />
-        Confirm & Process File
-      </Title>
-      <Flex
-        gap='md'
-        justify='center'
-        align='center'
-        direction='row'
-        wrap='wrap'
-      >
-        <CostSummary
-          totalCount={totalPages}
-          user={user}
-          hasValidCredit={hasValidCredit}
-        />
-        <Paper
-          style={{
-            maxWidth: 400,
-            margin: 'auto',
-            marginTop: 30,
-            padding: 20,
-            boxShadow: theme.shadows.sm,
-          }}
-        >
-          <Title order={3} ta='center' style={{ marginBottom: 20 }}>
-            Click to start processing
-          </Title>
-          <Button
-            onClick={handleProcessFile}
-            disabled={!isLoggedIn || !hasValidCredit || totalPages === 0}
-            fullWidth
-            size='lg'
-            my={30}
-            loading={isProcessing}
-          >
-            Process Files
-          </Button>
+      {totalPages === 0 || file === null ? (
+        <Center>
           <Alert
-            variant='outline'
             color='red'
-            title='Danger'
-            icon={<IconSkull />}
+            title='No files uploaded'
+            icon={<IconAlertTriangle />}
           >
-            <Text size='sm'>
-              Do not refresh the page or turn off your device during processing.
-              Large documents may take some time.
-            </Text>
+            <Text>Please upload a file to continue.</Text>
           </Alert>
-        </Paper>
-      </Flex>
-      <AddCreditBanner />
+        </Center>
+      ) : (
+        <>
+          <Title ta='center' my={20}>
+            <IconCircleNumber2 size={50} color={theme.colors.green[6]} />
+            Confirm & Process File
+          </Title>
+          <Flex
+            gap='md'
+            justify='center'
+            align='center'
+            direction='row'
+            wrap='wrap'
+          >
+            <CostSummary
+              totalCount={totalPages}
+              user={user}
+              hasValidCredit={hasValidCredit}
+            />
+            <Paper
+              style={{
+                maxWidth: 400,
+                margin: 'auto',
+                marginTop: 30,
+                padding: 20,
+                boxShadow: theme.shadows.sm,
+              }}
+            >
+              <Title order={3} ta='center' style={{ marginBottom: 20 }}>
+                Click to start processing
+              </Title>
+              <Button
+                onClick={handleProcessFile}
+                disabled={!isLoggedIn || !hasValidCredit || totalPages === 0}
+                fullWidth
+                size='lg'
+                my={30}
+                loading={isProcessing}
+              >
+                Process Files
+              </Button>
+              <Alert
+                variant='outline'
+                color='red'
+                title='Danger'
+                icon={<IconSkull />}
+              >
+                <Text size='sm'>
+                  Do not refresh the page or turn off your device during
+                  processing. Large documents may take some time.
+                </Text>
+              </Alert>
+            </Paper>
+          </Flex>
+          <AddCreditBanner />
+        </>
+      )}
     </Paper>
   );
 }

@@ -1,5 +1,5 @@
 import { convertNewLinesToHTML } from '@/utils/text-helper';
-import { Container, Group, SimpleGrid, Title } from '@mantine/core';
+import { Container, Grid, Group, SimpleGrid, Title } from '@mantine/core';
 import { Link, RichTextEditor } from '@mantine/tiptap';
 import Highlight from '@tiptap/extension-highlight';
 import SubScript from '@tiptap/extension-subscript';
@@ -34,62 +34,66 @@ export default function TextEditor({ content }: { content: string }) {
   return (
     <>
       <DownloadResults htmlContent={value} />
-      <Group>
-        <Container>
-          <Title c='red' mb='8'>
-            Raw OCR Text
-          </Title>
-          <RichTextEditor editor={editor} mih={200}>
-            <RichTextEditor.Toolbar sticky stickyOffset={60}>
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Bold />
-                <RichTextEditor.Italic />
-                <RichTextEditor.Underline />
-                <RichTextEditor.Strikethrough />
-                <RichTextEditor.ClearFormatting />
-                <RichTextEditor.Highlight />
-                <RichTextEditor.Code />
-              </RichTextEditor.ControlsGroup>
+      <Grid>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <Container>
+            <Title c='red' mb='8'>
+              Raw OCR Text
+            </Title>
+            <RichTextEditor editor={editor} mih={200}>
+              <RichTextEditor.Toolbar sticky stickyOffset={60}>
+                <RichTextEditor.ControlsGroup>
+                  <RichTextEditor.Bold />
+                  <RichTextEditor.Italic />
+                  <RichTextEditor.Underline />
+                  <RichTextEditor.Strikethrough />
+                  <RichTextEditor.ClearFormatting />
+                  <RichTextEditor.Highlight />
+                  <RichTextEditor.Code />
+                </RichTextEditor.ControlsGroup>
 
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.H1 />
-                <RichTextEditor.H2 />
-                <RichTextEditor.H3 />
-                <RichTextEditor.H4 />
-              </RichTextEditor.ControlsGroup>
+                <RichTextEditor.ControlsGroup>
+                  <RichTextEditor.H1 />
+                  <RichTextEditor.H2 />
+                  <RichTextEditor.H3 />
+                  <RichTextEditor.H4 />
+                </RichTextEditor.ControlsGroup>
 
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Blockquote />
-                <RichTextEditor.Hr />
-                <RichTextEditor.BulletList />
-                <RichTextEditor.OrderedList />
-                <RichTextEditor.Subscript />
-                <RichTextEditor.Superscript />
-              </RichTextEditor.ControlsGroup>
+                <RichTextEditor.ControlsGroup>
+                  <RichTextEditor.Blockquote />
+                  <RichTextEditor.Hr />
+                  <RichTextEditor.BulletList />
+                  <RichTextEditor.OrderedList />
+                  <RichTextEditor.Subscript />
+                  <RichTextEditor.Superscript />
+                </RichTextEditor.ControlsGroup>
 
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Link />
-                <RichTextEditor.Unlink />
-              </RichTextEditor.ControlsGroup>
+                <RichTextEditor.ControlsGroup>
+                  <RichTextEditor.Link />
+                  <RichTextEditor.Unlink />
+                </RichTextEditor.ControlsGroup>
 
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.AlignLeft />
-                <RichTextEditor.AlignCenter />
-                <RichTextEditor.AlignJustify />
-                <RichTextEditor.AlignRight />
-              </RichTextEditor.ControlsGroup>
+                <RichTextEditor.ControlsGroup>
+                  <RichTextEditor.AlignLeft />
+                  <RichTextEditor.AlignCenter />
+                  <RichTextEditor.AlignJustify />
+                  <RichTextEditor.AlignRight />
+                </RichTextEditor.ControlsGroup>
 
-              <RichTextEditor.ControlsGroup>
-                <RichTextEditor.Undo />
-                <RichTextEditor.Redo />
-              </RichTextEditor.ControlsGroup>
-            </RichTextEditor.Toolbar>
+                <RichTextEditor.ControlsGroup>
+                  <RichTextEditor.Undo />
+                  <RichTextEditor.Redo />
+                </RichTextEditor.ControlsGroup>
+              </RichTextEditor.Toolbar>
 
-            <RichTextEditor.Content />
-          </RichTextEditor>
-        </Container>
-        <PreviewDisplay htmlContent={value} />
-      </Group>
+              <RichTextEditor.Content />
+            </RichTextEditor>
+          </Container>
+        </Grid.Col>
+        <Grid.Col span={{ base: 12, md: 6 }}>
+          <PreviewDisplay htmlContent={value} />
+        </Grid.Col>
+      </Grid>
     </>
   );
 }

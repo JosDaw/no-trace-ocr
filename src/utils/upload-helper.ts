@@ -1,22 +1,23 @@
 import { showNotification } from '@mantine/notifications';
-
 export function checkPDFResults(
   fileName: string,
-  setIsProcessing: (arg0: boolean) => void
+  setIsProcessing: (arg0: boolean) => void,
+  totalPages: number
 ) {
-  // TODO: each page of the file gets it own separate file!!!
-
   return new Promise((resolve, reject) => {
     console.log('Starting to check results...');
 
+    let currentPage = 1; // Track the current page being processed
+    const results: any = []; // Array to store results from each page
+
     const intervalId = setInterval(async () => {
-      console.log('Checking results...');
+      console.log(`Checking results for page ${currentPage}...`);
       let response;
 
       try {
         response = await fetch('api/vision-pdf-results', {
           method: 'POST',
-          body: JSON.stringify({ fileName }),
+          body: JSON.stringify({ fileName, currentPage: currentPage }),
         });
       } catch (error) {
         console.error('Fetch error:', error);
@@ -40,9 +41,24 @@ export function checkPDFResults(
         }
       } else {
         const pdfResult = await response.json();
-        console.log('🚀 ~ checkResults ~ pdfResult:', pdfResult);
-        clearInterval(intervalId);
-        resolve(pdfResult); // Resolve the promise with the result
+        console.log(
+          `🚀 ~ checkResults ~ pdfResult for page ${currentPage}:`,
+          pdfResult
+        );
+
+        // Store the result from the current page
+        results.push(pdfResult.result.responses[0].fullTextAnnotation.text);
+
+        // Move to the next page
+        if (currentPage < totalPages) {
+          currentPage++;
+        } else {
+          console.log('All pages processed.', results);
+          const mergedResults = results.join('\n\n');
+          clearInterval(intervalId);
+          setIsProcessing(false);
+          resolve({ text: mergedResults }); // Resolve the promise with all the results
+        }
       }
     }, 5000);
   });

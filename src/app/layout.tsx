@@ -63,6 +63,12 @@ const theme = createTheme({
   defaultRadius: 'md',
 });
 
+const env = process.env.NODE_ENV || 'development';
+const paypalClientId =
+  env == 'development'
+    ? process.env.NEXT_PUBLIC_PAYPAL_SANDBOX_CLIENT_ID
+    : process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
+
 export default function RootLayout({
   children,
 }: {
