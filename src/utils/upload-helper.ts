@@ -4,6 +4,8 @@ export function checkPDFResults(
   fileName: string,
   setIsProcessing: (arg0: boolean) => void
 ) {
+  // TODO: each page of the file gets it own separate file!!!
+
   return new Promise((resolve, reject) => {
     console.log('Starting to check results...');
 

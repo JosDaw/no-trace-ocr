@@ -48,12 +48,11 @@ const VerifyPage = () => {
         if (!user) {
           return;
         }
-        const costPerItem = Number(process.env.PRICE_PER_ITEM) || 0.05;
 
         await addDoc(collection(database, 'user'), {
           email: user.email,
           userID: user.uid,
-          credit: costPerItem * 10,
+          credit: 0,
           timezone: Intl.DateTimeFormat().resolvedOptions().timeZone,
           dateCreated: Timestamp.now(),
           dateUpdated: Timestamp.now(),
@@ -64,7 +63,7 @@ const VerifyPage = () => {
               email: user.email,
               userID: user.uid,
               userDoc: userDoc.id,
-              credit: costPerItem * 10,
+              credit: 0,
             });
 
             setVerificationStatus('verified');

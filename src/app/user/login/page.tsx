@@ -121,7 +121,9 @@ const LoginPage = () => {
             Login
           </Button>
         </Group>
-        <Link href="/user/forgot" passHref><Text>Forgot Password?</Text></Link>
+        <Link href='/user/forgot' passHref>
+          <Text>Forgot Password?</Text>
+        </Link>
       </Flex>
     </Container>
   );

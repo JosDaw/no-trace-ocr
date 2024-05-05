@@ -19,9 +19,27 @@ const openSans = Fira_Sans({
 });
 
 export const metadata = {
-  title: 'No Trace OCR',
+  title: 'No Trace OCR | Privacy-focused OCR tool',
   description:
     'No Trace OCR is a privacy-focused OCR service that does not store your data. Securely your files or images and get the text extracted from them, quickly, easily, and affordably.',
+  keywords:
+    'OCR, free OCR, PDF OCR, image OCR, OCR tool, privacy-focused OCR, No Trace OCR, image to text, pdf to text',
+  robots: 'index, follow',
+  openGraph: {
+    type: 'website',
+    url: 'https://notraceocr.com',
+    title: 'No Trace OCR',
+    description:
+      'No Trace OCR is a privacy-focused OCR service that does not store your data. Securely your files or images and get the text extracted from them, quickly, easily, and affordably.',
+    images: [
+      {
+        url: 'https://notraceocr.com/assets/metacover.png',
+        width: 1200,
+        height: 630,
+        alt: 'No Trace OCR',
+      },
+    ],
+  },
 };
 
 const myColor: MantineColorsTuple = [

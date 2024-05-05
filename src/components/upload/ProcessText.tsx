@@ -1,5 +1,6 @@
 import { LoggedInUser } from '@/types/types';
 import {
+  Alert,
   Button,
   Container,
   Flex,
@@ -8,8 +9,13 @@ import {
   Title,
   useMantineTheme,
 } from '@mantine/core';
-import { IconCircleNumber2, IconCircleNumber3 } from '@tabler/icons-react';
+import {
+  IconAlertTriangle,
+  IconCircleNumber2,
+  IconSkull,
+} from '@tabler/icons-react';
 import React from 'react';
+import { AddCreditBanner } from '../credit/AddCreditBanner';
 import CostSummary from './CostSummary';
 
 interface ProcessTextProps {
@@ -32,10 +38,10 @@ export default function ProcessText({
   const theme = useMantineTheme();
 
   return (
-    <Paper my={100}>
+    <Paper my={50}>
       <Title ta='center' my={20}>
         <IconCircleNumber2 size={50} color={theme.colors.green[6]} />
-        Confirm & Process Document
+        Confirm & Process File
       </Title>
       <Flex
         gap='md'
@@ -44,7 +50,11 @@ export default function ProcessText({
         direction='row'
         wrap='wrap'
       >
-        <CostSummary totalCount={totalPages} user={user} />
+        <CostSummary
+          totalCount={totalPages}
+          user={user}
+          hasValidCredit={hasValidCredit}
+        />
         <Paper
           style={{
             maxWidth: 400,
@@ -67,11 +77,20 @@ export default function ProcessText({
           >
             Process Files
           </Button>
-          <Text ta='center' c='red.4' fw={700}>
-            Warning: Do not refresh the page or turn off your device.
-          </Text>
+          <Alert
+            variant='outline'
+            color='red'
+            title='Danger'
+            icon={<IconSkull />}
+          >
+            <Text size='sm'>
+              Do not refresh the page or turn off your device during processing.
+              Large documents may take some time.
+            </Text>
+          </Alert>
         </Paper>
       </Flex>
+      <AddCreditBanner />
     </Paper>
   );
 }

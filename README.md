@@ -10,9 +10,9 @@ Welcome to No Trace OCR, a secure, convenient, and affordable way to convert doc
 - Zustand (State management)
 - Google Cloud Vision
 - Google Cloud Storage (Ephemeral Only)
-- PayPal & Stripe Payments [TODO]
+- PayPal Payments
 
 TODO:
 
-- Account page (delete function)
+- Account page (delete account function)
 - Consider Amazon Textract???

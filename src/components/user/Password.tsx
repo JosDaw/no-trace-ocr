@@ -1,6 +1,13 @@
-import { getStrength } from "@/utils/text-helper";
-import { Box, Center, Group, PasswordInput, Progress, Text } from "@mantine/core";
-import { IconCheck, IconX } from "@tabler/icons-react";
+import { getStrength } from '@/utils/text-helper';
+import {
+  Box,
+  Center,
+  Group,
+  PasswordInput,
+  Progress,
+  Text,
+} from '@mantine/core';
+import { IconCheck, IconX } from '@tabler/icons-react';
 
 interface PasswordProps {
   password: string;
@@ -8,7 +15,6 @@ interface PasswordProps {
 }
 
 export default function Password({ password, setPassword }: PasswordProps) {
-
   function PasswordRequirement({
     meets,
     label,
@@ -63,24 +69,26 @@ export default function Password({ password, setPassword }: PasswordProps) {
       />
     ));
 
-  return <div>
-    <PasswordInput
-      value={password}
-      onChange={(event) => setPassword(event.currentTarget.value)}
-      placeholder='Your password'
-      label='Password'
-      required
-      miw={300}
-    />
+  return (
+    <div>
+      <PasswordInput
+        value={password}
+        onChange={(event) => setPassword(event.currentTarget.value)}
+        placeholder='Your password'
+        label='Password'
+        required
+        miw={300}
+      />
 
-    <Group gap={5} grow mt='xs' mb='md'>
-      {bars}
-    </Group>
+      <Group gap={5} grow mt='xs' mb='md'>
+        {bars}
+      </Group>
 
-    <PasswordRequirement
-      label='Has at least 6 characters'
-      meets={password.length > 5}
-    />
-    {checks}
-  </div>
+      <PasswordRequirement
+        label='Has at least 6 characters'
+        meets={password.length > 5}
+      />
+      {checks}
+    </div>
+  );
 }

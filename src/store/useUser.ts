@@ -12,6 +12,7 @@ interface UserState {
 interface UserActions {
   loginUser: (values: LoggedInUser) => void;
   logoutUser: () => void;
+  updateCredit: (credit: number) => void;
 }
 
 // Combine state and actions for the complete store type
@@ -35,6 +36,9 @@ const useUser = create<UserStore>()(
       },
       logoutUser: () => {
         set({ user: initialUser, isLoggedIn: false });
+      },
+      updateCredit: (credit: number) => {
+        set((state) => ({ user: { ...state.user, credit } }));
       },
     }),
     {

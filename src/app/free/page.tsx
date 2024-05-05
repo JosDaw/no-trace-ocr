@@ -4,7 +4,16 @@ import LoadingCover from '@/components/layout/LoadingCover';
 import FreeUpload from '@/components/upload/FreeUpload';
 import { generateUniqueToken } from '@/utils/text-helper';
 import { checkPDFResults } from '@/utils/upload-helper';
-import { Button, Center, CloseButton, Container, Group, Paper, Text, Title } from '@mantine/core';
+import {
+  Button,
+  Center,
+  CloseButton,
+  Container,
+  Group,
+  Paper,
+  Text,
+  Title,
+} from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { IconUpload } from '@tabler/icons-react';
 import Link from 'next/link';
@@ -45,9 +54,7 @@ export default function FreeUploadPage() {
 
     const fileType = file.type === 'application/pdf' ? 'pdf' : 'image';
 
-
     try {
-
       let result;
       if (fileType === 'pdf') {
         result = await sendFileToServer(
@@ -67,6 +74,7 @@ export default function FreeUploadPage() {
         color: 'green',
       });
     } catch (error: any) {
+      handleDeleteFiles(file); // Delete uploads if error occurs
       handleError(error.message);
     } finally {
       if (fileType === 'pdf') {
@@ -111,7 +119,7 @@ export default function FreeUploadPage() {
     );
 
     showNotification({
-      title: 'Files Deleted',
+      title: 'File Deleted',
       message: 'Your content has been deleted and is secure.',
       color: 'green',
     });
@@ -119,7 +127,7 @@ export default function FreeUploadPage() {
 
   const handleRefresh = () => {
     setShowResults(false);
-    setRefreshKey(oldKey => oldKey + 1); // Increment refresh key to force re-render
+    setRefreshKey((oldKey) => oldKey + 1); // Increment refresh key to force re-render
   };
 
   return (
@@ -138,32 +146,33 @@ export default function FreeUploadPage() {
         </>
       )}
       <Center my={70}>
-        <Button size="lg" variant="light" color="pink" onClick={handleRefresh}>
+        <Button size='lg' variant='light' color='pink' onClick={handleRefresh}>
           <IconUpload style={{ marginRight: 8 }} />
           Upload Another File
         </Button>
       </Center>
 
-      <Container mx={25} my={25}>
-        <Paper withBorder p="lg" radius="md" shadow="md">
-          <Group justify="space-between" mb="xs">
-            <Title fz="lg" fw={500} c="purple">
+      <Center mx={25} my={25}>
+        <Paper withBorder p='lg' radius='md' shadow='md'>
+          <Group justify='space-between' mb='xs'>
+            <Title fz='lg' fw={500} c='purple'>
               Need More Pages?
             </Title>
           </Group>
-          <Text c="dimmed">
-            Register and add credit to your account to process larger files with more pages.
-            No Trace OCR provides secure, accurate, and affordable processing for just $0.05 per page.
+          <Text c='dimmed'>
+            Register and add credit to your account to process larger files with
+            more pages. No Trace OCR provides secure, accurate, and affordable
+            processing for just $0.05 per page.
           </Text>
-          <Group justify="flex-end" mt="md">
-            <Link href="/user/register">
-              <Button variant="outline" size="md" color="purple">
+          <Group justify='flex-end' mt='md'>
+            <Link href='/user/register'>
+              <Button variant='outline' size='md' color='purple'>
                 Register
               </Button>
             </Link>
           </Group>
         </Paper>
-      </Container>
+      </Center>
     </Paper>
   );
 }

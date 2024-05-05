@@ -22,23 +22,47 @@ export default function DownloadResults({ htmlContent }: any) {
       <Title ta='center' size='md' my={25}>
         Download Your Content
       </Title>
-      <Group gap='md' justify="center">
-        <Button onClick={() => { printHtmlContent(htmlContent) }}>
+      <Group gap='md' justify='center'>
+        <Button
+          onClick={() => {
+            printHtmlContent(htmlContent);
+          }}
+        >
           <IconPrinter /> Print
         </Button>
-        <Button onClick={() => { downloadAsDocx(htmlContent) }}>
+        <Button
+          onClick={() => {
+            downloadAsDocx(htmlContent);
+          }}
+        >
           <IconFileTypeDocx /> Download DocX
         </Button>
-        <Button onClick={() => { downloadPdf(htmlContent) }}>
+        <Button
+          onClick={() => {
+            downloadPdf(htmlContent);
+          }}
+        >
           <IconFileTypePdf /> Download PDF
         </Button>
-        <Button onClick={() => { downloadAsDoc(htmlContent) }}>
+        <Button
+          onClick={() => {
+            downloadAsDoc(htmlContent);
+          }}
+        >
           <IconFileTypeDoc /> Download Doc
         </Button>
-        <Button onClick={() => { downloadAsTxt(htmlContent) }}>
+        <Button
+          onClick={() => {
+            downloadAsTxt(htmlContent);
+          }}
+        >
           <IconFileTypeTxt /> Download TXT
         </Button>
-        <Button onClick={() => { downloadHtmlContent(htmlContent) }}>
+        <Button
+          onClick={() => {
+            downloadHtmlContent(htmlContent);
+          }}
+        >
           <IconFileTypeHtml /> Download HTML
         </Button>
       </Group>

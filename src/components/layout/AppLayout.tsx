@@ -1,17 +1,78 @@
 'use client';
+import { database } from '@/config/firebase';
 import useUser from '@/store/useUser';
 import { formatCurrency } from '@/utils/text-helper';
-import { AppShell, Burger, Button, Group, Text, Title } from '@mantine/core';
+import {
+  AppShell,
+  Burger,
+  Button,
+  Group,
+  Loader,
+  Text,
+  Title,
+} from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
+import { showNotification } from '@mantine/notifications';
+import { collection, getDocs, limit, query, where } from 'firebase/firestore';
 import Link from 'next/link';
+import { useEffect, useState } from 'react';
 import { Footer } from './Footer';
 import Logo from './Logo';
 
 export function AppLayout({ children }: { children: React.ReactNode }) {
-  const [opened, { toggle }] = useDisclosure();
+  const [loading, setLoading] = useState<boolean>(false);
 
+  const [opened, { toggle }] = useDisclosure();
   const { isLoggedIn, user } = useUser();
   const logoutUser = useUser((state: any) => state.logoutUser);
+  const updateCredit = useUser((state: any) => state.updateCredit);
+
+  useEffect(() => {
+    async function fetchUserData() {
+      if (isLoggedIn) {
+        setLoading(true);
+
+        try {
+          // Get user details from firebase
+          const userQuery = query(
+            collection(database, 'user'),
+            where('userID', '==', user.userID),
+            limit(1)
+          );
+          const querySnapshot = await getDocs(userQuery);
+
+          if (!querySnapshot.empty) {
+            const userDoc = querySnapshot.docs[0];
+
+            if (userDoc.data().isDeleted) {
+              setLoading(false);
+              showNotification({
+                title: 'Error',
+                message: 'User not found. Please log out and try again.',
+                color: 'red',
+              });
+              return;
+            }
+
+            // Store with zustand
+            updateCredit(userDoc.data().credit);
+          }
+        } catch (error) {
+          console.error('Failed to fetch user data:', error);
+          setLoading(false);
+          showNotification({
+            title: 'Error',
+            message: 'An error occurred while fetching user details.',
+            color: 'red',
+          });
+        } finally {
+          setLoading(false);
+        }
+      }
+    }
+
+    fetchUserData();
+  }, [isLoggedIn, updateCredit, user.userID, setLoading]);
 
   return (
     <AppShell
@@ -29,9 +90,13 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             <Logo />
             {isLoggedIn ? (
               <Group ml='xl' gap={8} visibleFrom='sm'>
-                <Text size='sm' c='gray' mx={5}>
-                  Credit: {formatCurrency(user.credit)}
-                </Text>
+                {loading ? (
+                  <Loader />
+                ) : (
+                  <Text size='sm' c='gray' mx={5}>
+                    Credit: {formatCurrency(user.credit)}
+                  </Text>
+                )}
                 <Link href='/free' passHref>
                   <Button color='green'>Free Upload</Button>
                 </Link>
@@ -62,9 +127,13 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
       <AppShell.Navbar py='md' px={4}>
         {isLoggedIn ? (
           <Group ml='xl' gap={6} visibleFrom='sm'>
-            <Text size='sm' c='gray' mx={5}>
-              Credit: {formatCurrency(user.credit)}
-            </Text>
+            {loading ? (
+              <Loader />
+            ) : (
+              <Text size='sm' c='gray' mx={5}>
+                Credit: {formatCurrency(user.credit)}
+              </Text>
+            )}
             <Link href='/free' passHref>
               <Button color='green'>Free Upload</Button>
             </Link>

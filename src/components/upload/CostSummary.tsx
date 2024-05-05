@@ -1,14 +1,27 @@
 import { LoggedInUser } from '@/types/types';
 import { formatCurrency } from '@/utils/text-helper';
-import { Group, Paper, Text, Title, useMantineTheme } from '@mantine/core';
+import {
+  Alert,
+  Group,
+  Paper,
+  Text,
+  Title,
+  useMantineTheme,
+} from '@mantine/core';
+import { IconAlertTriangle } from '@tabler/icons-react';
 import React from 'react';
 
 interface CostSummaryProps {
   totalCount: number;
   user: LoggedInUser;
+  hasValidCredit: boolean;
 }
 
-export default function CostSummary({ totalCount, user }: CostSummaryProps) {
+export default function CostSummary({
+  totalCount,
+  user,
+  hasValidCredit,
+}: CostSummaryProps) {
   const theme = useMantineTheme();
   const costPerItem = Number(process.env.PRICE_PER_ITEM) || 0.05;
   const totalCost = totalCount * costPerItem;
@@ -54,6 +67,20 @@ export default function CostSummary({ totalCount, user }: CostSummaryProps) {
           {formatCurrency(user.credit)}
         </Text>
       </Group>
+      {!hasValidCredit && (
+        <Alert
+          my={20}
+          variant='light'
+          color='red'
+          title='Notice'
+          icon={<IconAlertTriangle />}
+        >
+          <Text size='sm'>
+            You do not have enough credit for this process. Please add more
+            credit to continue.
+          </Text>
+        </Alert>
+      )}
     </Paper>
   );
 }

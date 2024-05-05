@@ -71,7 +71,7 @@ export default function FreeUpload({
           showNotification({
             title: 'Error processing file',
             message:
-              'Please register for a free account to process PDFs with multiple pages.',
+              'Please register for an account to process PDFs with multiple pages.',
             color: 'red',
           });
           return;
@@ -212,9 +212,7 @@ export default function FreeUpload({
           size='md'
           radius='xl'
           onClick={handleSubmit}
-          disabled={
-            uploading || file === null || isProcessing
-          }
+          disabled={uploading || file === null || isProcessing}
           loading={uploading}
         >
           Process File
@@ -239,10 +237,7 @@ export default function FreeUpload({
         )}
       </div>
       {file && fileType === 'pdf' && (
-        <Document
-          file={file}
-          onLoadSuccess={onDocumentLoadSuccess}
-        ></Document>
+        <Document file={file} onLoadSuccess={onDocumentLoadSuccess}></Document>
       )}
     </Container>
   );

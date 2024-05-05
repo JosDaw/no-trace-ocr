@@ -19,11 +19,16 @@ import {
   IconX,
 } from '@tabler/icons-react';
 import { useCallback, useRef, useState } from 'react';
+import { Document, pdfjs } from 'react-pdf';
+
+// Set workerSrc for PDF.js
+pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
 interface FileUploadProps {
   handleDeleteFiles: () => void;
   setTotalPages: (totalPages: number) => void;
   setLocalFile: (file: File | null) => void;
+  nextStep: () => void;
   user: LoggedInUser;
   totalPages: number;
 }
@@ -32,11 +37,13 @@ export default function FileUpload({
   handleDeleteFiles,
   setTotalPages,
   setLocalFile,
+  nextStep,
   user,
   totalPages,
 }: FileUploadProps) {
   const [file, setFile] = useState<File | null>(null);
   const [uploading, setUploading] = useState<boolean>(false);
+  const [hasUploaded, setHasUploaded] = useState<boolean>(false);
   const theme = useMantineTheme();
   const openRef = useRef<() => void>(null);
 
@@ -47,6 +54,13 @@ export default function FileUpload({
       setFile(droppedFile); // Set the file in state, replacing any previous
     }
   }, []);
+
+  /**
+   * Handle page counter
+   */
+  const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
+    setTotalPages(numPages);
+  };
 
   // Handle file upload
   const handleSubmit = async () => {
@@ -63,52 +77,39 @@ export default function FileUpload({
     setLocalFile(file);
 
     try {
-      let pageCount = 0;
       if (file.type === 'application/pdf') {
-        const formData = new FormData();
-        formData.append('pdf', file);
-
-        // Fetch page count for PDF
-        const pageCountResponse = await fetch('api/page-counter', {
-          method: 'POST',
-          body: formData,
-        });
-
-        if (!pageCountResponse.ok) {
-          throw new Error('Failed to get page count');
+        if (totalPages === 0) {
+          showNotification({
+            title: 'Error processing file',
+            message: 'Please upload a PDF with at least 1 page.',
+            color: 'red',
+          });
+          return;
         }
-
-        const pageCountResult = await pageCountResponse.json();
-        pageCount = pageCountResult.pageCount;
 
         // Upload the PDF if it has more than 0 pages
-        if (pageCount > 0) {
-          const uploadFormData = new FormData();
-          uploadFormData.append('file', file);
-          uploadFormData.append('userId', user.userID);
+        const uploadFormData = new FormData();
+        uploadFormData.append('file', file);
+        uploadFormData.append('userId', user.userID);
 
-          const uploadResponse = await fetch('api/vision-pdf-upload', {
-            method: 'POST',
-            body: uploadFormData,
-          });
+        const uploadResponse = await fetch('api/vision-pdf-upload', {
+          method: 'POST',
+          body: uploadFormData,
+        });
 
-          if (!uploadResponse.ok) {
-            throw new Error('Failed to upload PDF');
-          }
+        if (!uploadResponse.ok) {
+          throw new Error('Failed to upload PDF');
         }
-      } else {
-        // Assume non-PDF files are images with 1 page
-        pageCount = 1;
-      }
 
-      // Update total pages with the page count of the single file
-      setTotalPages(pageCount);
+        setHasUploaded(true);
+      }
 
       showNotification({
         title: 'Upload Complete',
-        message: 'Please continue to the next step.',
+        message: 'Please confirm and process the file.',
         color: 'green',
       });
+      nextStep();
     } catch (error: any) {
       showNotification({
         title: 'Error processing file',
@@ -213,7 +214,7 @@ export default function FileUpload({
             size='md'
             radius='xl'
             onClick={handleDelete}
-            disabled={uploading || file === null || totalPages === 0}
+            disabled={uploading || file === null || !hasUploaded}
           >
             <IconTrashX style={{ marginRight: rem(5) }} />
             Delete
@@ -230,10 +231,10 @@ export default function FileUpload({
           size='md'
           radius='xl'
           onClick={handleSubmit}
-          disabled={uploading || file === null || totalPages > 0}
+          disabled={uploading || file === null}
           loading={uploading}
         >
-          {totalPages > 0 ? 'Uploaded File' : 'Start Upload'}
+          {file !== null ? 'Upload File' : 'Continue to Next Step'}
         </Button>
         {file !== null && (
           <Button
@@ -247,13 +248,16 @@ export default function FileUpload({
             size='md'
             radius='xl'
             onClick={handleCancel}
-            disabled={uploading || totalPages > 0}
+            disabled={uploading || hasUploaded}
           >
             <IconX style={{ marginRight: rem(5) }} />
             Cancel
           </Button>
         )}
       </div>
+      {file && file.type === 'application/pdf' && (
+        <Document file={file} onLoadSuccess={onDocumentLoadSuccess}></Document>
+      )}
     </Container>
   );
 }

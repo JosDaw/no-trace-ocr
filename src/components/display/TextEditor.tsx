@@ -1,5 +1,5 @@
 import { convertNewLinesToHTML } from '@/utils/text-helper';
-import { Container, SimpleGrid, Title } from '@mantine/core';
+import { Container, Group, SimpleGrid, Title } from '@mantine/core';
 import { Link, RichTextEditor } from '@mantine/tiptap';
 import Highlight from '@tiptap/extension-highlight';
 import SubScript from '@tiptap/extension-subscript';
@@ -34,7 +34,7 @@ export default function TextEditor({ content }: { content: string }) {
   return (
     <>
       <DownloadResults htmlContent={value} />
-      <SimpleGrid cols={2}>
+      <Group>
         <Container>
           <Title c='red' mb='8'>
             Raw OCR Text
@@ -89,7 +89,7 @@ export default function TextEditor({ content }: { content: string }) {
           </RichTextEditor>
         </Container>
         <PreviewDisplay htmlContent={value} />
-      </SimpleGrid>
+      </Group>
     </>
   );
 }

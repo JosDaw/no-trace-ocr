@@ -8,9 +8,7 @@ interface DisplayModalProps {
   textJSON: Annotation[] | any;
 }
 
-export default function DisplayResults({
-  textJSON,
-}: DisplayModalProps) {
+export default function DisplayResults({ textJSON }: DisplayModalProps) {
   return (
     <Paper my={50}>
       <Title ta='center'>OCR Processed Content</Title>
@@ -36,9 +34,7 @@ export default function DisplayResults({
           Please use the download buttons to save your content.
         </Alert>
       </Center>
-      {textJSON && (
-        <TextEditor content={textJSON.annotations.text} />
-      )}
+      {textJSON && <TextEditor content={textJSON.annotations.text} />}
     </Paper>
   );
 }

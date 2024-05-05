@@ -18,7 +18,7 @@ const questions = [
   {
     question: 'How does No Trace OCR work?',
     answer:
-      'After creating an account, you can upload your documents for OCR processing. You can use your free credit or load more credit onto your account to process more documents. Once your documents are processed, you can download the results in your preferred format. After processing, all documents are immediately deleted from our servers.',
+      'After creating an account, you can upload your documents for OCR processing. You can use the free upload or load credit onto your account to process larger documents. Once your documents are processed, you can download the results in your preferred format. After processing, all documents are immediately deleted from our servers.',
   },
   {
     question: 'Is No Trace OCR really confidential?',
