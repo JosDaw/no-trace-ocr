@@ -5,13 +5,11 @@ export function checkPDFResults(
   totalPages: number
 ) {
   return new Promise((resolve, reject) => {
-    console.log('Starting to check results...');
 
     let currentPage = 1; // Track the current page being processed
     const results: any = []; // Array to store results from each page
 
     const intervalId = setInterval(async () => {
-      console.log(`Checking results for page ${currentPage}...`);
       let response;
 
       try {
@@ -41,10 +39,6 @@ export function checkPDFResults(
         }
       } else {
         const pdfResult = await response.json();
-        console.log(
-          `🚀 ~ checkResults ~ pdfResult for page ${currentPage}:`,
-          pdfResult
-        );
 
         // Store the result from the current page
         results.push(pdfResult.result.responses[0].fullTextAnnotation.text);
@@ -53,10 +47,8 @@ export function checkPDFResults(
         if (currentPage < totalPages) {
           currentPage++;
         } else {
-          console.log('All pages processed.', results);
           const mergedResults = results.join('\n\n');
           clearInterval(intervalId);
-          setIsProcessing(false);
           resolve({ text: mergedResults }); // Resolve the promise with all the results
         }
       }

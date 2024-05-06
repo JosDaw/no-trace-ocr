@@ -33,18 +33,18 @@ export function UserMenu() {
   const handleDeleteUser = async () => {
     if (auth.currentUser) {
       try {
+        // Update user first
+        const updateRef = doc(
+          collection(database, 'user'),
+          user.userDoc.toString()
+        );
+
+        await updateDoc(updateRef, {
+          isDeleted: true,
+          dateUpdated: Timestamp.now(),
+        });
+
         await deleteUser(auth.currentUser).then(async () => {
-          const updateRef = doc(
-            collection(database, 'user'),
-            user.userDoc.toString()
-          );
-
-          // Update credit first
-          await updateDoc(updateRef, {
-            isDeleted: true,
-            dateUpdated: Timestamp.now(),
-          });
-
           logoutUser();
           router.push('/');
 

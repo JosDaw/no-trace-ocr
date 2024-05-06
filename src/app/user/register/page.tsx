@@ -68,7 +68,6 @@ const RegisterPage = () => {
         message: 'Registration successful! Verification email sent.',
         color: 'green',
       });
-      setEmail('');
       setPassword('');
       setConfirmPassword('');
       setTermsAccepted(false);
@@ -89,8 +88,7 @@ const RegisterPage = () => {
         Register
       </Title>
       <Text fw={500} ta='center' mb={45}>
-        Create an account to get started with No Trace OCR, and receive 10 free
-        pages!
+        Create a free account to get started with No Trace OCR!
       </Text>
       {emailSent ? (
         <Title c='blue' ta='center' mb={45}>

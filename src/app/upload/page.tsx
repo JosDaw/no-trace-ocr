@@ -60,9 +60,9 @@ export default function UploadPage() {
     };
 
     const processComplete = async () => {
-      setIsProcessing(false);
       setShowResults(true);
       setActive(2);
+      setIsProcessing(false);
 
       const totalCost = totalPages * costPerItem;
 
@@ -73,6 +73,7 @@ export default function UploadPage() {
         pages: totalPages,
         date: Timestamp.now(),
       });
+
     };
 
     const handleError = (message: string) => {
