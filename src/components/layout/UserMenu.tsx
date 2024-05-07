@@ -30,6 +30,12 @@ export function UserMenu() {
       ? process.env.NEXT_PUBLIC_PAYPAL_SANDBOX_CLIENT_ID
       : process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 
+  /**
+   * Handles the deletion of the user account.
+   * If the user is signed in, it updates the user document in the database to mark it as deleted,
+   * deletes the user from the authentication system, logs out the user, and redirects to the home page.
+   * If no user is signed in, it shows an error notification.
+   */
   const handleDeleteUser = async () => {
     if (auth.currentUser) {
       try {
@@ -69,6 +75,7 @@ export function UserMenu() {
       });
     }
   };
+
   return (
     <PayPalScriptProvider
       options={{

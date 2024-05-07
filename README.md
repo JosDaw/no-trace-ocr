@@ -61,3 +61,4 @@ No Trace OCR is actively maintained and under continuous development.
 - Implement Cypress testing for improved reliability.
 - Explore additional OCR services to enhance accuracy or support different formatting requirements.
 - Introduce font options for the editor and download functionality.
+- Refactor free + credit uploads to reduce duplicated code.

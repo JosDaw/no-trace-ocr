@@ -1,5 +1,4 @@
 import {
-  Anchor,
   Center,
   Divider,
   Grid,
@@ -72,7 +71,7 @@ export function Footer() {
         >
           <Grid.Col span={6}>
             <Text size='sm' py={6} c='dimmed'>
-              © 2024 No Trace OCR, a brand of Constant Learning. All rights
+              © 2024 No Trace OCR, a website of Constant Learning. All rights
               reserved.
               <br />
               경기도 용인시 기흥구 공세로 150-29 Business License: 423-40-00999

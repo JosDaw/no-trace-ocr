@@ -1,6 +1,6 @@
 {
-  "name": "",
-  "short_name": "",
+  "name": "No Trace OCR",
+  "short_name": "NTOCR",
   "icons": [
     {
       "src": "/android-chrome-192x192.png",

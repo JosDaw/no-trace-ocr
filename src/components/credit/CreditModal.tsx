@@ -55,6 +55,7 @@ export default function CreditModal({ opened, onClose }: CreditModalProps) {
             height: 50,
           }}
           createOrder={(data, actions) => {
+            // Create payment intent
             return actions.order.create({
               intent: 'CAPTURE',
               purchase_units: [

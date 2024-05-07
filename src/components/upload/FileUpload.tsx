@@ -62,7 +62,15 @@ export default function FileUpload({
     setTotalPages(numPages);
   };
 
-  // Handle file upload
+  
+  /**
+   * Handles the submission of the file upload form.
+   * If a file is selected, it uploads the file and shows a success notification.
+   * If the file is a PDF, it checks if it has at least 1 page before uploading.
+   * If the upload is successful, it sets the `hasUploaded` state to true.
+   * If there is an error during the upload or processing, it shows an error notification.
+   * Finally, it sets the `uploading` state to false.
+   */
   const handleSubmit = async () => {
     if (!file) {
       showNotification({
@@ -124,12 +132,17 @@ export default function FileUpload({
     }
   };
 
-  // Handle file upload cancellation
+  /**
+   * Deletes a non-uploaded file
+   */
   const handleCancel = () => {
     setFile(null);
     setLocalFile(null);
   };
 
+  /**
+   * Deletes the file and resets the state.
+   */
   const handleDelete = () => {
     handleDeleteFiles();
     setFile(null);

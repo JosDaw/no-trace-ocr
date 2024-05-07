@@ -12,12 +12,14 @@ import {
 import { Notifications } from '@mantine/notifications';
 import { Fira_Sans } from 'next/font/google';
 
+// Add font
 const openSans = Fira_Sans({
   weight: ['400', '500', '600', '700'],
   style: 'normal',
   subsets: ['latin'],
 });
 
+// Add basic metadata
 export const metadata = {
   title: 'No Trace OCR | Privacy-focused OCR tool',
   description:
@@ -62,12 +64,6 @@ const theme = createTheme({
   fontFamily: openSans.style.fontFamily,
   defaultRadius: 'md',
 });
-
-const env = process.env.NODE_ENV || 'development';
-const paypalClientId =
-  env == 'development'
-    ? process.env.NEXT_PUBLIC_PAYPAL_SANDBOX_CLIENT_ID
-    : process.env.NEXT_PUBLIC_PAYPAL_CLIENT_ID;
 
 export default function RootLayout({
   children,

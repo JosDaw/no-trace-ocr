@@ -41,7 +41,12 @@ export default function FreeUpload({
   const theme = useMantineTheme();
   const openRef = useRef<() => void>(null);
 
-  // Handle file drop event
+  
+  /**
+   * Handles the dropped files.
+   * 
+   * @param {File[]} files - The array of dropped files.
+   */
   const handleDrop = useCallback((files: File[]) => {
     if (files.length > 0) {
       const droppedFile = files[0]; // Only take the first file from the dropped files
@@ -49,14 +54,23 @@ export default function FreeUpload({
     }
   }, []);
 
+
   /**
-   * Handle page counter
+   * Callback function that is called when the document is successfully loaded.
+   * @param {number} numPages - The total number of pages in the document.
    */
   const onDocumentLoadSuccess = ({ numPages }: { numPages: number }) => {
     setTotalPages(numPages);
   };
 
-  // Handle file upload
+  /**
+   * Handles the form submission when a file is selected for upload.
+   * If no file is selected, shows a notification and returns early.
+   * If the selected file is a PDF with multiple pages, shows an error notification and returns early.
+   * If the selected file is a PDF with 0 pages, shows an error notification and returns early.
+   * Otherwise, uploads the file and handles the processing.
+   * If an error occurs during processing or uploading, shows an error notification.
+   */
   const handleSubmit = async () => {
     if (!file) {
       showNotification({
@@ -135,7 +149,10 @@ export default function FreeUpload({
     }
   };
 
-  // Handle file upload cancellation
+  /**
+   * Handles the cancellation of the file upload.
+   * Resets the file and total pages to 0.
+   */
   const handleCancel = () => {
     setFile(null);
     setTotalPages(0);

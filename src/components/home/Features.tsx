@@ -1,6 +1,5 @@
 'use client';
 import {
-  Button,
   Container,
   Grid,
   SimpleGrid,
@@ -9,7 +8,6 @@ import {
   Title,
 } from '@mantine/core';
 import {
-  IconBrandSpeedtest,
   IconFileTypeDoc,
   IconLock,
   IconTagsOff,

@@ -17,6 +17,10 @@ export default function ResetPassword() {
 
   const auth = getAuth(firebaseApp);
 
+  /**
+   * Handles the form submission for resetting the password.
+   * @param event - The form submission event.
+   */
   const handleSubmit = async (event: { preventDefault: () => void }) => {
     event.preventDefault();
     const mode = searchParams.get('mode');

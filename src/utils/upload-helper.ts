@@ -1,4 +1,13 @@
 import { showNotification } from '@mantine/notifications';
+
+/**
+ * Checks the results of a PDF processing operation.
+ * 
+ * @param fileName - The name of the PDF file.
+ * @param setIsProcessing - A function to set the processing state.
+ * @param totalPages - The total number of pages in the PDF file.
+ * @returns A promise that resolves with the merged results of all pages.
+ */
 export function checkPDFResults(
   fileName: string,
   setIsProcessing: (arg0: boolean) => void,

@@ -14,6 +14,13 @@ interface PasswordProps {
   setPassword: (password: string) => void;
 }
 
+/**
+ * Renders a password component with password strength indicators and requirements.
+ *
+ * @param {Object} props - The component props.
+ * @param {string} props.password - The current password value.
+ * @param {Function} props.setPassword - The function to update the password value.
+ */
 export default function Password({ password, setPassword }: PasswordProps) {
   function PasswordRequirement({
     meets,

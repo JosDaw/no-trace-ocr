@@ -14,7 +14,7 @@ export default function Logo() {
         p={10}
         ta='center'
         style={{
-          display: 'inline-block', // Needed to confine the background to the text
+          display: 'inline-block',
           fontFamily: orbitron.style.fontFamily,
           color: 'black',
         }}
@@ -23,8 +23,8 @@ export default function Logo() {
         <span
           style={{
             background: 'linear-gradient(to bottom, #89D4CF, #734AE8)',
-            WebkitBackgroundClip: 'text', // Applies the gradient as a text color
-            WebkitTextFillColor: 'transparent', // Makes the text transparent, showing the background
+            WebkitBackgroundClip: 'text',
+            WebkitTextFillColor: 'transparent', 
           }}
         >
           OCR

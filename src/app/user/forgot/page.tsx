@@ -12,6 +12,11 @@ export default function ForgotPasswordPage() {
 
   const auth = getAuth(firebaseApp);
 
+  /**
+   * Handles the form submission for resetting the password.
+   * 
+   * @param event - The event object.
+   */
   const handleSubmit = (event: { preventDefault: () => void }) => {
     event.preventDefault();
 

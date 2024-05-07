@@ -1,7 +1,6 @@
 import { Annotation } from '@/types/types';
-import { Alert, Button, Center, Paper, Title } from '@mantine/core';
-import { IconAlertTriangle, IconUpload } from '@tabler/icons-react';
-import Link from 'next/link';
+import { Alert, Center, Paper, Title } from '@mantine/core';
+import { IconAlertTriangle } from '@tabler/icons-react';
 import TextEditor from './TextEditor';
 
 interface DisplayModalProps {

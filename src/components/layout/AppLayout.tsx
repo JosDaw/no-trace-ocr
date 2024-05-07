@@ -10,7 +10,6 @@ import {
   Loader,
   Stack,
   Text,
-  Title,
 } from '@mantine/core';
 import { useDisclosure } from '@mantine/hooks';
 import { showNotification } from '@mantine/notifications';
@@ -35,7 +34,7 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         setLoading(true);
 
         try {
-          // Get user details from firebase
+          // Get user details from firebase and update the credit
           const userQuery = query(
             collection(database, 'user'),
             where('userID', '==', user.userID),
@@ -60,7 +59,6 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
             updateCredit(userDoc.data().credit);
           }
         } catch (error) {
-          console.error('Failed to fetch user data:', error);
           setLoading(false);
           showNotification({
             title: 'Error',

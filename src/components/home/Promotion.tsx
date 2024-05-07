@@ -2,7 +2,6 @@
 import {
   Button,
   Container,
-  Divider,
   List,
   ListItem,
   Text,

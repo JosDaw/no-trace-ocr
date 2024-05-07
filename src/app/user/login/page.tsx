@@ -27,7 +27,11 @@ const LoginPage = () => {
   const auth = getAuth(firebaseApp);
   const loginUser = useUser((state: any) => state.loginUser);
 
-  const handleRegister = async () => {
+  /**
+   * Handles the login process.
+   * @returns {Promise<void>} A promise that resolves when the login process is complete.
+   */
+  const handleLogin = async (): Promise<void> => {
     setLoading(true);
     try {
       await signInWithEmailAndPassword(auth, email, password)
@@ -125,7 +129,7 @@ const LoginPage = () => {
           required
         />
         <Group mt='md'>
-          <Button onClick={handleRegister} loading={loading}>
+          <Button onClick={handleLogin} loading={loading}>
             Login
           </Button>
         </Group>

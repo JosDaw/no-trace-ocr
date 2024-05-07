@@ -25,8 +25,6 @@ import { useSearchParams } from 'next/navigation';
 import { useCallback, useEffect, useState } from 'react';
 import ResetPassword from './ResetPassword';
 
-// TODO: check this page. seems like its failing on the first time.
-
 type VerificationStatus = 'error' | 'verified' | null;
 
 export default function Verify() {
@@ -39,6 +37,11 @@ export default function Verify() {
   const auth = getAuth(firebaseApp);
   const loginUser = useUser((state: any) => state.loginUser);
 
+  /**
+   * Verifies the user's email using the provided verification code.
+   * 
+   * @param code - The verification code to be used for email verification.
+   */
   const verifyEmail = useCallback(
     async (code: string) => {
       try {

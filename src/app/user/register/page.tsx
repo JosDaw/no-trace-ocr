@@ -1,23 +1,19 @@
 'use client';
 import Password from '@/components/user/Password';
 import { firebaseApp } from '@/config/firebase';
-import { getFirebaseError, getStrength } from '@/utils/text-helper';
+import { getFirebaseError } from '@/utils/text-helper';
 import {
-  Box,
   Button,
-  Center,
   Checkbox,
   Container,
   Flex,
   Group,
   PasswordInput,
-  Progress,
   Text,
   TextInput,
   Title,
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
-import { IconCheck, IconX } from '@tabler/icons-react';
 import {
   createUserWithEmailAndPassword,
   getAuth,
@@ -36,7 +32,12 @@ const RegisterPage = () => {
 
   const auth = getAuth(firebaseApp);
 
-  const handleRegister = async () => {
+  /**
+   * Handles the registration process.
+   * 
+   * @returns {Promise<void>} A promise that resolves when the registration process is complete.
+   */
+  const handleRegister = async (): Promise<void> => {
     if (password !== confirmPassword) {
       showNotification({
         title: 'Error',

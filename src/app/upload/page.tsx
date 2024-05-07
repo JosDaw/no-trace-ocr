@@ -54,12 +54,17 @@ export default function UploadPage() {
   const costPerItem = Number(process.env.PRICE_PER_ITEM) || 0.05;
   const hasValidCredit = user.credit >= totalPages * costPerItem;
 
-  const handleProcessFile = async () => {
+  /**
+   * Handles the processing of a file.
+   * 
+   * @returns {Promise<void>} A promise that resolves when the file processing is complete.
+   */
+  const handleProcessFile = async (): Promise<void> => {
     const processStart = () => {
       setIsProcessing(true);
     };
 
-    const processComplete = async () => {
+    const processComplete = async (): Promise<void> => {
       setShowResults(true);
       setActive(2);
       setIsProcessing(false);
@@ -161,7 +166,14 @@ export default function UploadPage() {
     }
   };
 
-  const sendFileToServer = async (url: string, body: string | FormData) => {
+  /**
+   * Sends a file to the server using a POST request.
+   * @param {string} url - The URL to send the file to.
+   * @param {string | FormData} body - The body of the request, which can be either a string or a FormData object.
+   * @returns {Promise<any>} - A Promise that resolves to the JSON response from the server.
+   * @throws {Error} - If the server responds with an error.
+   */
+  const sendFileToServer = async (url: string, body: string | FormData): Promise<any> => {
     const response = await fetch(url, {
       method: 'POST',
       body,
@@ -174,6 +186,9 @@ export default function UploadPage() {
     return response.json();
   };
 
+  /**
+   * Deletes the file from the server and shows a notification.
+   */
   const handleDeleteFiles = async () => {
     if (!localFile) return;
 
@@ -192,6 +207,11 @@ export default function UploadPage() {
     });
   };
 
+  /**
+   * Handles the refresh action.
+   * Resets the local file, total pages, and show results state.
+   * Increments the refresh key to force a re-render.
+   */
   const handleRefresh = () => {
     setLocalFile(null);
     setTotalPages(0);

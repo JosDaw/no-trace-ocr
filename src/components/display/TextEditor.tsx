@@ -1,5 +1,5 @@
 import { convertNewLinesToHTML } from '@/utils/text-helper';
-import { Container, Grid, Group, SimpleGrid, Title } from '@mantine/core';
+import { Container, Grid, Title } from '@mantine/core';
 import { Link, RichTextEditor } from '@mantine/tiptap';
 import Highlight from '@tiptap/extension-highlight';
 import SubScript from '@tiptap/extension-subscript';

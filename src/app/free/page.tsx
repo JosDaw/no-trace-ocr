@@ -7,8 +7,6 @@ import { checkPDFResults } from '@/utils/upload-helper';
 import {
   Button,
   Center,
-  CloseButton,
-  Container,
   Group,
   Paper,
   Text,
@@ -26,6 +24,11 @@ export default function FreeUploadPage() {
   const [refreshKey, setRefreshKey] = useState<number>(0);
   const uniqueUserId = generateUniqueToken();
 
+  /**
+   * Handles the processing of a file.
+   * 
+   * @param file - The file to be processed.
+   */
   const handleProcessFile = async (file: File) => {
     const processStart = () => {
       setIsProcessing(true);
@@ -97,7 +100,14 @@ export default function FreeUploadPage() {
     }
   };
 
-  const sendFileToServer = async (url: string, body: string | FormData) => {
+  /**
+   * Sends a file to the server using a POST request.
+   * @param {string} url - The URL to send the file to.
+   * @param {string | FormData} body - The body of the request, which can be either a string or a FormData object.
+   * @returns {Promise<any>} - A Promise that resolves to the JSON response from the server.
+   * @throws {Error} - If the server responds with an error.
+   */
+  const sendFileToServer = async (url: string, body: string | FormData): Promise<any> => {
     const response = await fetch(url, {
       method: 'POST',
       body,
@@ -110,6 +120,12 @@ export default function FreeUploadPage() {
     return response.json();
   };
 
+  /**
+   * Deletes a file and sends a request to the server to delete the file.
+   * Shows a notification after successful deletion.
+   *
+   * @param file - The file to be deleted.
+   */
   const handleDeleteFiles = async (file: File) => {
     if (!file) return;
 
@@ -125,6 +141,10 @@ export default function FreeUploadPage() {
     });
   };
 
+  /**
+   * Handles the refresh action.
+   * This function sets `showResults` to `false` and increments the `refreshKey` to force a re-render.
+   */
   const handleRefresh = () => {
     setShowResults(false);
     setRefreshKey((oldKey) => oldKey + 1); // Increment refresh key to force re-render
