@@ -35,7 +35,7 @@ Please read our [Contributing](/CONTRIBUTING.md) guide to learn how to get start
 - Firebase (create a database and authentication, allow email/password authentication)
 - PayPal
 - Brevo
-- Google Cloud: Create a service account and generate a key for GOOGLE_APPLICATION_CREDENTIALS, GOOGLE_CLOUD_STORAGE_CREDENTIALS, GOOGLE_CLOUD_EMAIL, etc.
+- Google Cloud: Create a service account and generate a key for `GOOGLE_APPLICATION_CREDENTIALS`, `GOOGLE_CLOUD_STORAGE_CREDENTIALS`, `GOOGLE_CLOUD_EMAIL`, etc.
 
 3. Enable the Google Cloud Vision and Google Cloud Storage APIs and create a new bucket in the storage (note: there may be a small fee for the monthly bucket - remember to delete it after use!).
 4. Ensure that the Google service account you created has admin/create/edit/delete access to the storage bucket and to Google Cloud Vision.
@@ -45,7 +45,7 @@ Please read our [Contributing](/CONTRIBUTING.md) guide to learn how to get start
 
 ## License
 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](/LICENSE).
 
 ## Contact Information
 
