@@ -22,8 +22,7 @@ export default function DisplayResults({ textJSON }: DisplayModalProps) {
           title='Warning - Please Read'
           icon={<IconAlertTriangle />}
         >
-          For confidentiality purposes, no content is saved on OCRiginal
-          Translator.
+          For confidentiality purposes, no content is saved on No Trace OCR.
           <br />
           <br />
           <strong>

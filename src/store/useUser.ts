@@ -42,7 +42,7 @@ const useUser = create<UserStore>()(
       },
     }),
     {
-      name: 'ocriginal-user-store',
+      name: 'no-trace-ocr-user-store',
       storage: createJSONStorage(() => localStorage),
     }
   )
