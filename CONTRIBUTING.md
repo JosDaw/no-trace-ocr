@@ -23,11 +23,11 @@ git clone https://github.com/your-username/repository-name.git
 git checkout -b feature-or-bug-fix-name
 ```
 
-4. Make your changes and commit them to your branch:
+4. Make your changes and commit them to your branch - make sure to follow the commit lint rules.
 
 ``` bash
 git add .
-git commit -m "Description of your changes"
+git commit -m "feat: description of your changes"
 ```
 
 5. Push your changes to your forked repository:

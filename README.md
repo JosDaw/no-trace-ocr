@@ -41,7 +41,8 @@ Please read our [Contributing](/CONTRIBUTING.md) guide to learn how to get start
 4. Ensure that the Google service account you created has admin/create/edit/delete access to the storage bucket and to Google Cloud Vision.
 5. Add the obtained credentials to your .env.local file.
 6. Run `npm install` in your terminal to install all required dependencies.
-7. Run `npm run dev` to start the development server.
+7. Run `npx husky install` to prepare commit linting.
+8. Run `npm run dev` to start the development server.
 
 ## License
 
