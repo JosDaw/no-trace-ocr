@@ -14,7 +14,7 @@ export default function ForgotPasswordPage() {
 
   /**
    * Handles the form submission for resetting the password.
-   * 
+   *
    * @param event - The event object.
    */
   const handleSubmit = (event: { preventDefault: () => void }) => {

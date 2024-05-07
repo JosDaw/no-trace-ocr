@@ -4,14 +4,7 @@ import LoadingCover from '@/components/layout/LoadingCover';
 import FreeUpload from '@/components/upload/FreeUpload';
 import { generateUniqueToken } from '@/utils/text-helper';
 import { checkPDFResults } from '@/utils/upload-helper';
-import {
-  Button,
-  Center,
-  Group,
-  Paper,
-  Text,
-  Title,
-} from '@mantine/core';
+import { Button, Center, Group, Paper, Text, Title } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { IconUpload } from '@tabler/icons-react';
 import Link from 'next/link';
@@ -26,7 +19,7 @@ export default function FreeUploadPage() {
 
   /**
    * Handles the processing of a file.
-   * 
+   *
    * @param file - The file to be processed.
    */
   const handleProcessFile = async (file: File) => {
@@ -107,7 +100,10 @@ export default function FreeUploadPage() {
    * @returns {Promise<any>} - A Promise that resolves to the JSON response from the server.
    * @throws {Error} - If the server responds with an error.
    */
-  const sendFileToServer = async (url: string, body: string | FormData): Promise<any> => {
+  const sendFileToServer = async (
+    url: string,
+    body: string | FormData
+  ): Promise<any> => {
     const response = await fetch(url, {
       method: 'POST',
       body,

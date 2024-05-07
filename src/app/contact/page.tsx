@@ -24,7 +24,7 @@ export default function ContactPage() {
   /**
    * Handles the change event for input and textarea elements.
    * Updates the form data state with the new value.
-   * 
+   *
    * @param {React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>} e - The change event object.
    */
   const handleChange = (
@@ -36,7 +36,7 @@ export default function ContactPage() {
 
   /**
    * Handles the form submission.
-   * 
+   *
    * @param event - The form event.
    */
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {

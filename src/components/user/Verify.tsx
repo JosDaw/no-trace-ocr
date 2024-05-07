@@ -39,7 +39,7 @@ export default function Verify() {
 
   /**
    * Verifies the user's email using the provided verification code.
-   * 
+   *
    * @param code - The verification code to be used for email verification.
    */
   const verifyEmail = useCallback(

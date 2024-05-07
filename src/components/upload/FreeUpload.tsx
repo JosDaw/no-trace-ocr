@@ -41,10 +41,9 @@ export default function FreeUpload({
   const theme = useMantineTheme();
   const openRef = useRef<() => void>(null);
 
-  
   /**
    * Handles the dropped files.
-   * 
+   *
    * @param {File[]} files - The array of dropped files.
    */
   const handleDrop = useCallback((files: File[]) => {
@@ -53,7 +52,6 @@ export default function FreeUpload({
       setFile(droppedFile); // Set the file in state, replacing any previous
     }
   }, []);
-
 
   /**
    * Callback function that is called when the document is successfully loaded.

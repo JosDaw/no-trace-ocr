@@ -62,7 +62,6 @@ export default function FileUpload({
     setTotalPages(numPages);
   };
 
-  
   /**
    * Handles the submission of the file upload form.
    * If a file is selected, it uploads the file and shows a success notification.

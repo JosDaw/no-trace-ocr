@@ -2,7 +2,7 @@ import { showNotification } from '@mantine/notifications';
 
 /**
  * Checks the results of a PDF processing operation.
- * 
+ *
  * @param fileName - The name of the PDF file.
  * @param setIsProcessing - A function to set the processing state.
  * @param totalPages - The total number of pages in the PDF file.

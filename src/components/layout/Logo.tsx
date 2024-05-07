@@ -24,7 +24,7 @@ export default function Logo() {
           style={{
             background: 'linear-gradient(to bottom, #89D4CF, #734AE8)',
             WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent', 
+            WebkitTextFillColor: 'transparent',
           }}
         >
           OCR

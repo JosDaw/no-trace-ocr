@@ -56,7 +56,7 @@ export default function UploadPage() {
 
   /**
    * Handles the processing of a file.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the file processing is complete.
    */
   const handleProcessFile = async (): Promise<void> => {
@@ -173,7 +173,10 @@ export default function UploadPage() {
    * @returns {Promise<any>} - A Promise that resolves to the JSON response from the server.
    * @throws {Error} - If the server responds with an error.
    */
-  const sendFileToServer = async (url: string, body: string | FormData): Promise<any> => {
+  const sendFileToServer = async (
+    url: string,
+    body: string | FormData
+  ): Promise<any> => {
     const response = await fetch(url, {
       method: 'POST',
       body,

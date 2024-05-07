@@ -34,7 +34,7 @@ const RegisterPage = () => {
 
   /**
    * Handles the registration process.
-   * 
+   *
    * @returns {Promise<void>} A promise that resolves when the registration process is complete.
    */
   const handleRegister = async (): Promise<void> => {

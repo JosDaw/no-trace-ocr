@@ -1,11 +1,4 @@
-import {
-  Center,
-  Divider,
-  Grid,
-  Group,
-  Paper,
-  Text,
-} from '@mantine/core';
+import { Center, Divider, Grid, Group, Paper, Text } from '@mantine/core';
 import Link from 'next/link';
 import CookieConsent from 'react-cookie-consent';
 import Logo from './Logo';
