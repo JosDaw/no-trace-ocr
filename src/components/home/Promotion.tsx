@@ -21,7 +21,7 @@ export default function Promotion() {
           mb={30}
           className='text-2xl font-bold text-gray-800 md:text-3xl'
         >
-          Use Our OCR Services for Free 
+          Use Our OCR Services for Free
         </Title>
         <Text
           mb={25}
@@ -29,8 +29,8 @@ export default function Promotion() {
           fw={500}
           className='text-md max-w-xl text-center text-gray-600 md:text-lg'
         >
-          Explore our OCR services with free uploads. Experience
-          the difference in your workflow.
+          Explore our OCR services with free uploads. Experience the difference
+          in your workflow.
         </Text>
         <List
           mb={25}

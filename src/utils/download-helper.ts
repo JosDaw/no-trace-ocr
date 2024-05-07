@@ -83,8 +83,8 @@ export async function downloadPdf(htmlContent: any) {
     return;
   }
 
-  const {default: html2pdf} = await import('html2pdf.js');
-  
+  const { default: html2pdf } = await import('html2pdf.js');
+
   try {
     html2pdf()
       .from(htmlContent)

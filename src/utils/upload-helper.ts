@@ -5,7 +5,6 @@ export function checkPDFResults(
   totalPages: number
 ) {
   return new Promise((resolve, reject) => {
-
     let currentPage = 1; // Track the current page being processed
     const results: any = []; // Array to store results from each page
 

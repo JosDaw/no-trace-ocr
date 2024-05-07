@@ -135,7 +135,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
               </Text>
             )}
             <Link href='/free' passHref>
-              <Button color='green' onClick={toggle}>Free Upload</Button>
+              <Button color='green' onClick={toggle}>
+                Free Upload
+              </Button>
             </Link>
             <Link href='/upload' passHref>
               <Button onClick={toggle}>Upload</Button>
@@ -145,7 +147,9 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
         ) : (
           <Stack ml={8}>
             <Link href='/free' passHref>
-              <Button color='green' onClick={toggle}>Free Upload</Button>
+              <Button color='green' onClick={toggle}>
+                Free Upload
+              </Button>
             </Link>
             <Link href='/user/register' passHref>
               <Button onClick={toggle}>Register</Button>

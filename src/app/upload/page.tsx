@@ -73,7 +73,6 @@ export default function UploadPage() {
         pages: totalPages,
         date: Timestamp.now(),
       });
-
     };
 
     const handleError = (message: string) => {

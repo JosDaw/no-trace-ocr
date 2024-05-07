@@ -2,7 +2,15 @@
 import { database, firebaseApp } from '@/config/firebase';
 import useUser from '@/store/useUser';
 import { getFirebaseError } from '@/utils/text-helper';
-import { Button, Container, Flex, Group, Text, TextInput, Title } from '@mantine/core';
+import {
+  Button,
+  Container,
+  Flex,
+  Group,
+  Text,
+  TextInput,
+  Title,
+} from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { collection, getDocs, limit, query, where } from 'firebase/firestore';

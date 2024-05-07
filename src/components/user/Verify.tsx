@@ -41,7 +41,6 @@ export default function Verify() {
 
   const verifyEmail = useCallback(
     async (code: string) => {
-
       try {
         await applyActionCode(getAuth(firebaseApp), code);
 
@@ -118,73 +117,73 @@ export default function Verify() {
     return () => unsubscribe();
   }, [auth, isLoading, searchParams, verifyEmail]);
 
-  return (
-    type === 'resetPassword' ? <ResetPassword /> :
-      <Container mx='auto' mt='xl'>
-        <LoadingCover visible={isLoading} />
-        {(verificationStatus === 'verified' ||
-          verificationStatus === 'error') && (
-            <Box
-              style={{
-                display: 'flex',
-                flexDirection: 'column',
-                justifyContent: 'center',
-                alignItems: 'center',
-              }}
-              pt={25}
-            >
-              {verificationStatus === 'verified' && (
-                <>
-                  <IconMoodHappyFilled size={60} color='green' />
-                  <Title my={20} ta='center' c='green'>
-                    Your email has been successfully verified!
-                  </Title>
+  return type === 'resetPassword' ? (
+    <ResetPassword />
+  ) : (
+    <Container mx='auto' mt='xl'>
+      <LoadingCover visible={isLoading} />
+      {(verificationStatus === 'verified' ||
+        verificationStatus === 'error') && (
+        <Box
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+          }}
+          pt={25}
+        >
+          {verificationStatus === 'verified' && (
+            <>
+              <IconMoodHappyFilled size={60} color='green' />
+              <Title my={20} ta='center' c='green'>
+                Your email has been successfully verified!
+              </Title>
 
-                  <Alert
-                    my={50}
-                    variant='light'
-                    color='green'
-                    title='Start uploading'
-                    icon={<IconCircleCheck />}
-                  >
-                    <Text>
-                      Start using your account by uploading your documents.
-                    </Text>
-                    <Link href='/upload' passHref>
-                      <Button size='lg' mt={20} variant='white' color='green'>
-                        Upload
-                      </Button>
-                    </Link>
-                  </Alert>
-                </>
-              )}
-              {verificationStatus === 'error' && (
-                <>
-                  <IconMoodSadFilled size={60} color='red' />
-                  <Title my={20} ta='center' c='red'>
-                    Oh no, the verification failed!
-                  </Title>
-                  <Text>
-                    Refresh the page and try again. If the problem persists, please
-                    contact us.
-                  </Text>
-                </>
-              )}
-              <Flex gap={6}>
-                <Link href='/' passHref>
-                  <Button mt='md' color='red'>
-                    Go to Home
+              <Alert
+                my={50}
+                variant='light'
+                color='green'
+                title='Start uploading'
+                icon={<IconCircleCheck />}
+              >
+                <Text>
+                  Start using your account by uploading your documents.
+                </Text>
+                <Link href='/upload' passHref>
+                  <Button size='lg' mt={20} variant='white' color='green'>
+                    Upload
                   </Button>
                 </Link>
-                <Link href='/contact' passHref>
-                  <Button mt='md' color='blue'>
-                    Contact Us
-                  </Button>
-                </Link>
-              </Flex>
-            </Box>
+              </Alert>
+            </>
           )}
-      </Container>
+          {verificationStatus === 'error' && (
+            <>
+              <IconMoodSadFilled size={60} color='red' />
+              <Title my={20} ta='center' c='red'>
+                Oh no, the verification failed!
+              </Title>
+              <Text>
+                Refresh the page and try again. If the problem persists, please
+                contact us.
+              </Text>
+            </>
+          )}
+          <Flex gap={6}>
+            <Link href='/' passHref>
+              <Button mt='md' color='red'>
+                Go to Home
+              </Button>
+            </Link>
+            <Link href='/contact' passHref>
+              <Button mt='md' color='blue'>
+                Contact Us
+              </Button>
+            </Link>
+          </Flex>
+        </Box>
+      )}
+    </Container>
   );
-};
-
+}

@@ -1,13 +1,7 @@
 'use client';
 import Password from '@/components/user/Password';
 import { firebaseApp } from '@/config/firebase';
-import {
-  Alert,
-  Button,
-  Container,
-  PasswordInput,
-  Title,
-} from '@mantine/core';
+import { Alert, Button, Container, PasswordInput, Title } from '@mantine/core';
 import { confirmPasswordReset, getAuth } from 'firebase/auth';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useState } from 'react';
