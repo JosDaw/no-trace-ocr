@@ -41,7 +41,7 @@ export function UserMenu() {
 
         await updateDoc(updateRef, {
           isDeleted: true,
-          dateUpdated: Timestamp.now(),
+          dateDeleted: Timestamp.now(),
         });
 
         await deleteUser(auth.currentUser).then(async () => {
