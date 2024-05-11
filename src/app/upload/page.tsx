@@ -105,7 +105,9 @@ export default function UploadPage() {
     }
 
     if (totalPages > 100) {
-      handleError('File has too many pages. Please upload a file with less than 100 pages.');
+      handleError(
+        'File has too many pages. Please upload a file with less than 100 pages.'
+      );
       return;
     }
 
@@ -231,14 +233,12 @@ export default function UploadPage() {
   if (!isLoggedIn) {
     return (
       <Center mt={50}>
-        <Alert
-          color='red'
-          title='Not logged in'
-          icon={<IconSkull />}
-        >
+        <Alert color='red' title='Not logged in' icon={<IconSkull />}>
           <Text my={10}>Please log in to use the paid OCR service.</Text>
-          <Link href="/user/login" passHref>
-            <Button variant='white' color='red'>Login</Button>
+          <Link href='/user/login' passHref>
+            <Button variant='white' color='red'>
+              Login
+            </Button>
           </Link>
         </Alert>
       </Center>
