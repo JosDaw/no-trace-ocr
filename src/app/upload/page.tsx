@@ -18,7 +18,7 @@ import {
 } from '@mantine/core';
 import { showNotification } from '@mantine/notifications';
 import { PayPalScriptProvider } from '@paypal/react-paypal-js';
-import { IconAlertTriangle, IconUpload } from '@tabler/icons-react';
+import { IconAlertTriangle, IconSkull, IconUpload } from '@tabler/icons-react';
 import {
   addDoc,
   collection,
@@ -26,7 +26,8 @@ import {
   Timestamp,
   updateDoc,
 } from 'firebase/firestore';
-import { useState } from 'react';
+import Link from 'next/link';
+import { useEffect, useState } from 'react';
 
 export default function UploadPage() {
   const [totalPages, setTotalPages] = useState<number>(0);
@@ -100,6 +101,11 @@ export default function UploadPage() {
       handleError(
         'Insufficient credit. Please add more credit to process the file.'
       );
+      return;
+    }
+
+    if (totalPages > 100) {
+      handleError('File has too many pages. Please upload a file with less than 100 pages.');
       return;
     }
 
@@ -221,6 +227,23 @@ export default function UploadPage() {
     setShowResults(false);
     setRefreshKey((oldKey) => oldKey + 1); // Increment refresh key to force re-render
   };
+
+  if (!isLoggedIn) {
+    return (
+      <Center mt={50}>
+        <Alert
+          color='red'
+          title='Not logged in'
+          icon={<IconSkull />}
+        >
+          <Text my={10}>Please log in to use the paid OCR service.</Text>
+          <Link href="/user/login" passHref>
+            <Button variant='white' color='red'>Login</Button>
+          </Link>
+        </Alert>
+      </Center>
+    );
+  }
 
   return (
     <PayPalScriptProvider
