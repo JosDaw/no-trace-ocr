@@ -77,6 +77,30 @@ export function Footer() {
             </Group>
           </Grid.Col>
         </Grid>
+
+        <Divider my='sm' />
+        <Center>
+          <Group>
+            <Text c='gray' size='sm' inline>
+              ❤️
+            </Text>
+          </Group>
+        </Center>
+        <Center>
+          <Text size='xs' c='dimmed'>
+            Built by{' '}
+            <Link
+              href='https://josiedaw.com'
+              passHref
+              target='__blank'
+              rel='noreferrer'
+            >
+              <Text component='a' variant='link' size='xs' c='dimmed'>
+                Josie Daw
+              </Text>
+            </Link>
+          </Text>
+        </Center>
       </Paper>
     </>
   );
