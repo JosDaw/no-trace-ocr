@@ -27,7 +27,7 @@ import {
   updateDoc,
 } from 'firebase/firestore';
 import Link from 'next/link';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 
 export default function UploadPage() {
   const [totalPages, setTotalPages] = useState<number>(0);
